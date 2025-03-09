@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Page</title>
+    <script src="https://js.stripe.com/v3/"></script>
+</head>
+<body>
+
+    <h2>Choose Payment Method</h2>
+
+    <form id="payment-form">
+        <label>
+            <input type="radio" name="payment_method" value="credit_card" checked> Credit Card (Stripe)
+        </label><br>
+        <label>
+            <input type="radio" name="payment_method" value="tng"> Touch 'n Go (iPay88)
+        </label><br>
+        <label>
+            <input type="radio" name="payment_method" value="alipay"> Alipay (iPay88)
+        </label><br><br>
+
+        <div id="card-element">
+            <!-- Stripe Credit Card Input Field -->
+        </div>
+
+        <button type="submit">Pay Now</button>
+    </form>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const stripe = Stripe("YOUR_STRIPE_PUBLIC_KEY");
+            const elements = stripe.elements();
+            const card = elements.create("card");
+            card.mount("#card-element");
+
+            document.getElementById("payment-form").addEventListener("submit", async (event) => {
+                event.preventDefault();
+
+                const selectedMethod = document.querySelector('input[name="payment_method"]:checked').value;
+
+                if (selectedMethod === "credit_card") {
+                    const { paymentMethod, error } = await stripe.createPaymentMethod({
+                        type: "card",
+                        card: card,
+                    });
+
+                    if (error) {
+                        alert(error.message);
+                    } else {
+                        fetch("process_payment.php", {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({ method: "stripe", paymentMethodId: paymentMethod.id })
+                        }).then(res => res.json()).then(data => alert(data.message));
+                    }
+                } else {
+                    window.location.href = "process_payment.php?method=" + selectedMethod;
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>
