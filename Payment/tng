@@ -3,64 +3,92 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Payment Page</title>
-    <script src="https://js.stripe.com/v3/"></script>
+    <title>Payment Gateway</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; }
+        .payment-container { width: 300px; margin: auto; padding: 20px; border: 1px solid #ccc; border-radius: 10px; }
+        .hidden { display: none; }
+    </style>
 </head>
 <body>
-
-    <h2>Choose Payment Method</h2>
-
-    <form id="payment-form">
-        <label>
-            <input type="radio" name="payment_method" value="credit_card" checked> Credit Card (Stripe)
-        </label><br>
-        <label>
-            <input type="radio" name="payment_method" value="tng"> Touch 'n Go (iPay88)
-        </label><br>
-        <label>
-            <input type="radio" name="payment_method" value="alipay"> Alipay (iPay88)
-        </label><br><br>
-
-        <div id="card-element">
-            <!-- Stripe Credit Card Input Field -->
+    <div class="payment-container">
+        <h2>Select Payment Method</h2>
+        <select id="paymentMethod" onchange="togglePaymentForm()">
+            <option value="">--Select--</option>
+            <option value="credit-card">Credit/Debit Card</option>
+            <option value="e-wallet">E-Wallet (Touch 'n Go eWallet)</option>
+            <option value="online-banking">Online Banking</option>
+            <option value="cash">Cash on Delivery</option>
+        </select>
+        
+        <div id="eWalletForm" class="hidden">
+            <p>Scan the QR code to pay with Touch 'n Go eWallet:</p>
+            <img src="tng-qr-code.png" alt="Touch 'n Go QR Code" width="150">
         </div>
 
-        <button type="submit">Pay Now</button>
-    </form>
+        <div id="creditCardForm" class="hidden">
+            <h3>Enter Credit/Debit Card Details</h3>
+            <input type="text" id="cardNumber" placeholder="Card Number" required><br><br>
+            <input type="text" id="cardName" placeholder="Cardholder Name" required><br><br>
+            <input type="text" id="expiry" placeholder="Expiry Date (MM/YY)" required><br><br>
+            <input type="text" id="cvv" placeholder="CVV" required><br><br>
+            <button onclick="redirectToBank()">Pay Now</button>
+        </div>
+
+        <div id="onlineBankingForm" class="hidden">
+            <p>Select Your Bank:</p>
+            <select id="bankSelect">
+                <option value="maybank">Maybank</option>
+                <option value="cimb">CIMB</option>
+                <option value="rhb">RHB</option>
+                <option value="publicbank">Public Bank</option>
+            </select>
+            <button onclick="redirectToBank()">Proceed to Bank</button>
+        </div>
+
+        <div id="cashForm" class="hidden">
+            <p>Please pay cash to the delivery rider.</p>
+        </div>
+    </div>
 
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const stripe = Stripe("YOUR_STRIPE_PUBLIC_KEY");
-            const elements = stripe.elements();
-            const card = elements.create("card");
-            card.mount("#card-element");
+        function togglePaymentForm() {
+            document.getElementById('eWalletForm').classList.add('hidden');
+            document.getElementById('creditCardForm').classList.add('hidden');
+            document.getElementById('onlineBankingForm').classList.add('hidden');
+            document.getElementById('cashForm').classList.add('hidden');
+            
+            let method = document.getElementById('paymentMethod').value;
+            if (method === 'e-wallet') {
+                document.getElementById('eWalletForm').classList.remove('hidden');
+            } else if (method === 'credit-card') {
+                document.getElementById('creditCardForm').classList.remove('hidden');
+            } else if (method === 'online-banking') {
+                document.getElementById('onlineBankingForm').classList.remove('hidden');
+            } else if (method === 'cash') {
+                document.getElementById('cashForm').classList.remove('hidden');
+            }
+        }
 
-            document.getElementById("payment-form").addEventListener("submit", async (event) => {
-                event.preventDefault();
+        function redirectToBank() {
+            let bankUrls = {
+                "maybank": "https://www.maybank2u.com.my/",
+                "cimb": "https://www.cimbclicks.com.my/",
+                "rhb": "https://logon.rhb.com.my/",
+                "publicbank": "https://www.pbebank.com/"
+            };
+            
+            let selectedBank = document.getElementById('bankSelect')?.value;
+            let paymentMethod = document.getElementById('paymentMethod').value;
 
-                const selectedMethod = document.querySelector('input[name="payment_method"]:checked').value;
-
-                if (selectedMethod === "credit_card") {
-                    const { paymentMethod, error } = await stripe.createPaymentMethod({
-                        type: "card",
-                        card: card,
-                    });
-
-                    if (error) {
-                        alert(error.message);
-                    } else {
-                        fetch("process_payment.php", {
-                            method: "POST",
-                            headers: { "Content-Type": "application/json" },
-                            body: JSON.stringify({ method: "stripe", paymentMethodId: paymentMethod.id })
-                        }).then(res => res.json()).then(data => alert(data.message));
-                    }
-                } else {
-                    window.location.href = "process_payment.php?method=" + selectedMethod;
-                }
-            });
-        });
+            if (paymentMethod === 'credit-card') {
+                window.location.href = "https://your-payment-gateway.com/process-payment";
+            } else if (paymentMethod === 'online-banking' && selectedBank in bankUrls) {
+                window.location.href = bankUrls[selectedBank];
+            } else {
+                alert("Invalid payment selection.");
+            }
+        }
     </script>
-
 </body>
 </html>

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Change Delivery Address</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; }
+        .container { width: 80%; margin: auto; padding: 20px; }
+        .address-box { border: 1px solid #ccc; padding: 10px; margin: 10px 0; }
+        .hidden { display: none; }
+        button { padding: 10px; margin-top: 10px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Payment & Delivery</h2>
+        <div class="address-box">
+            <h3>Current Delivery Address:</h3>
+            <p id="currentAddress">No address selected.</p>
+            <button onclick="toggleAddressForm()">Change Address</button>
+        </div>
+        
+        <div id="addressForm" class="hidden">
+            <h3>Enter New Address</h3>
+            <input type="text" id="newAddress" placeholder="Enter your address" style="width: 80%; padding: 5px;">
+            <button onclick="updateAddress()">Save Address</button>
+        </div>
+    </div>
+    
+    <script>
+        function loadAddress() {
+            let savedAddress = localStorage.getItem("deliveryAddress");
+            if (savedAddress) {
+                document.getElementById("currentAddress").textContent = savedAddress;
+            }
+        }
+
+        function toggleAddressForm() {
+            document.getElementById("addressForm").classList.toggle("hidden");
+        }
+
+        function updateAddress() {
+            let newAddress = document.getElementById("newAddress").value;
+            if (newAddress.trim() !== "") {
+                localStorage.setItem("deliveryAddress", newAddress);
+                document.getElementById("currentAddress").textContent = newAddress;
+                document.getElementById("addressForm").classList.add("hidden");
+            } else {
+                alert("Please enter a valid address.");
+            }
+        }
+
+        window.onload = loadAddress;
+    </script>
+</body>
+</html>
