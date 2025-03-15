@@ -1,0 +1,205 @@
+<?php
+session_start();
+$conn = new mysqli("localhost", "root", "", "checkout_db");
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $name = $_POST['name'];
+    $address = $_POST['address'];
+    $postcode = $_POST['postcode'];
+    $paymentMethod = $_POST['paymentMethod'];
+    $tip = $_POST['tip'];
+    $deliveryCharge = $_POST['deliveryCharge'];
+    $totalAmount = $_POST['totalAmount'];
+
+    $sql = "INSERT INTO orders (name, address, postcode, payment_method, tip, delivery_charge, total_amount) VALUES (?, ?, ?, ?, ?, ?, ?)";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("ssssddd", $name, $address, $postcode, $paymentMethod, $tip, $deliveryCharge, $totalAmount);
+    if ($stmt->execute()) {
+        echo "Order placed successfully!";
+    } else {
+        echo "Error: " . $stmt->error;
+    }
+    $stmt->close();
+    $conn->close();
+}
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f8f8;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .checkout-container {
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            width: 400px;
+        }
+        .section {
+            margin-bottom: 20px;
+        }
+        .section h3 {
+            margin-bottom: 10px;
+            color: #333;
+        }
+        .address-box, #addressForm, .order-summary {
+            background: #f1f1f1;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .address-box button, #addressForm button,
+        .submit-btn, .section button {
+            background: #28a745;
+            color: #fff;
+            border: none;
+            padding: 8px 12px;
+            margin-top: 5px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .submit-btn {
+            width: 100%;
+            font-size: 16px;
+        }
+        select, input[type="text"] {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .tip-buttons button {
+            background: #ff9800;
+            margin-right: 5px;
+        }
+        hr {
+            border: 0.5px solid #ddd;
+        }
+    </style>
+</head>
+<body>
+    <div class="checkout-container">
+        <h2>Checkout</h2>
+        
+        <div class="section">
+            <h3>Delivery Address</h3>
+            <div class="address-box">
+                <p><strong id="displayAddress">5 Jalan Bukit Indah 17</strong></p>
+                <p id="displayPostcode">Johor, 85020</p>
+                <button onclick="openAddressForm()">Change</button>
+            </div>
+            <div id="addressForm" style="display: none;">
+                <input type="text" id="newAddress" placeholder="Enter new address">
+                <input type="text" id="newPostcode" placeholder="Enter new postcode">
+                <button onclick="saveAddress()">Save</button>
+                <button onclick="closeAddressForm()">Cancel</button>
+            </div>
+        </div>
+
+        <div class="section">
+            <h3>Delivery Options</h3>
+            <label><input type="radio" name="delivery" value="-1.40" onclick="updateDelivery(this)"> Economy (20-35 min) - RM 1.40 off</label><br>
+            <label><input type="radio" name="delivery" value="0" checked onclick="updateDelivery(this)"> Standard (10-25 min)</label><br>
+            <label><input type="radio" name="delivery" value="2.40" onclick="updateDelivery(this)"> Priority (5-20 min) + RM 2.40</label>
+        </div>
+
+        <div class="section">
+            <h3>Payment Method</h3>
+            <select id="paymentMethod" onchange="togglePaymentDetails()">
+                <option value="tng">Touch 'n Go eWallet</option>
+                <option value="credit-card">Credit/Debit Card</option>
+                <option value="bank">Online Banking</option>
+                <option value="cash">Cash on Delivery</option>
+            </select>
+            <div id="paymentDetails"></div>
+        </div>
+
+        <div class="section">
+            <h3>Tip Your Rider (Optional)</h3>
+            <div class="tip-buttons">
+                <button onclick="addTip(1.00)">RM 1.00</button>
+                <button onclick="addTip(2.00)">RM 2.00</button>
+                <button onclick="addTip(3.00)">RM 3.00</button>
+                <button onclick="addTip(4.00)">RM 4.00</button>
+            </div>
+        </div>
+
+        <div class="section">
+            <h3>Order Summary</h3>
+            <div id="orderSummary"></div>
+            <hr>
+            <p><strong>Total: RM <span id="totalAmount">0.00</span></strong></p>
+        </div>
+
+        <button class="submit-btn" onclick="placeOrder()">Place Order</button>
+    </div>
+
+    <script>
+        let orders = [
+            { name: "Loaded Potato Bowl", price: 6.90 },
+            { name: "Packaging Fee", price: 2.00 },
+            { name: "Service Tax", price: 0.24 }
+        ];
+        let tipAmount = 0;
+        let deliveryCharge = 3.99;
+
+        function updateOrderSummary() {
+            let orderSummaryDiv = document.getElementById('orderSummary');
+            let total = orders.reduce((sum, order) => sum + order.price, 0) + tipAmount + deliveryCharge;
+            orderSummaryDiv.innerHTML = orders.map(order => `<p>${order.name} - RM ${order.price.toFixed(2)}</p>`).join('');
+            orderSummaryDiv.innerHTML += `<p>Delivery - RM ${deliveryCharge.toFixed(2)}</p>`;
+            if (tipAmount > 0) orderSummaryDiv.innerHTML += `<p>Tip - RM ${tipAmount.toFixed(2)}</p>`;
+            document.getElementById('totalAmount').innerText = total.toFixed(2);
+        }
+
+        function updateDelivery(option) {
+            deliveryCharge = 3.99 + parseFloat(option.value);
+            updateOrderSummary();
+        }
+
+        function addTip(amount) {
+            tipAmount = amount;
+            updateOrderSummary();
+        }
+
+        function openAddressForm() {
+            document.getElementById('addressForm').style.display = 'block';
+        }
+
+        function closeAddressForm() {
+            document.getElementById('addressForm').style.display = 'none';
+        }
+
+        function saveAddress() {
+            let newAddress = document.getElementById('newAddress').value;
+            let newPostcode = document.getElementById('newPostcode').value;
+            if (newAddress) document.getElementById('displayAddress').innerText = newAddress;
+            if (newPostcode) document.getElementById('displayPostcode').innerText = newPostcode;
+            closeAddressForm();
+        }
+
+        function placeOrder() {
+            alert("Your order has been placed successfully!");
+        }
+
+        updateOrderSummary();
+    </script>
+</body>
+</html>
