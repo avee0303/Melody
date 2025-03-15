@@ -4,67 +4,103 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rider Delivery System</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <style>
         body { font-family: Arial, sans-serif; text-align: center; }
-        .container { width: 80%; margin: auto; padding: 20px; }
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        th, td { border: 1px solid #ccc; padding: 10px; text-align: left; }
-        th { background-color: #f4f4f4; }
-        .btn { padding: 5px 10px; margin: 5px; cursor: pointer; }
-        .pending { background-color: orange; }
-        .delivered { background-color: green; color: white; }
+        #map { height: 400px; width: 100%; margin: 10px auto; }
+        .container { max-width: 800px; margin: auto; padding: 20px; }
+        button { background-color: #007bff; color: white; padding: 8px 12px; cursor: pointer; border-radius: 5px; border: none; }
+        button:hover { background-color: #0056b3; }
     </style>
-</head>1
+</head>
 <body>
+
     <div class="container">
-        <h2>Rider Delivery System</h2>
-        <table>
-            <thead>
-                <tr>
-                    <th>Order ID</th>
-                    <th>Customer</th>
-                    <th>Address</th>
-                    <th>Payment</th>
-                    <th>Status</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody id="orderTable"></tbody>
-        </table>
+        <h1>Rider Delivery System</h1>
+        <p>Click the map to set pickup & delivery locations.</p>
+
+        <h2>Current Delivery</h2>
+        <div id="currentOrder">
+            <p><strong>Pickup:</strong> <span id="pickupLocation">Not Set</span></p>
+            <p><strong>Delivery:</strong> <span id="deliveryLocation">Not Set</span></p>
+            <button onclick="resetMarkers()">Reset Locations</button>
+        </div>
+
+        <h2>Navigation</h2>
+        <div id="map"></div>
     </div>
-    
+
     <script>
-        let orders = JSON.parse(localStorage.getItem("deliveryOrders")) || [
-            { id: 1, customer: "John Doe", address: "123 Street, City", payment: "Paid", status: "Pending" },
-            { id: 2, customer: "Jane Smith", address: "456 Avenue, Town", payment: "Cash on Delivery", status: "Pending" }
-        ];
+        let map = L.map('map').setView([3.139, 101.686], 12); // Kuala Lumpur
 
-        function loadOrders() {
-            let table = document.getElementById("orderTable");
-            table.innerHTML = "";
-            orders.forEach(order => {
-                let row = `<tr>
-                    <td>${order.id}</td>
-                    <td>${order.customer}</td>
-                    <td>${order.address}</td>
-                    <td>${order.payment}</td>
-                    <td class="status">${order.status}</td>
-                    <td>
-                        <button class="btn pending" onclick="updateStatus(${order.id}, 'On the Way')">On the Way</button>
-                        <button class="btn delivered" onclick="updateStatus(${order.id}, 'Delivered')">Delivered</button>
-                    </td>
-                </tr>`;
-                table.innerHTML += row;
-            });
+        // 加载 OSM 地图
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap'
+        }).addTo(map);
+
+        let pickupMarker, deliveryMarker, routeLine;
+
+        // 点击地图设定取货 & 送货地点
+        map.on("click", function (e) {
+            let latlng = e.latlng;
+
+            if (!pickupMarker) {
+                pickupMarker = L.marker(latlng).addTo(map)
+                    .bindPopup("📍 Pickup Location").openPopup();
+                document.getElementById("pickupLocation").innerText = `Lat: ${latlng.lat}, Lng: ${latlng.lng}`;
+                alert("✅ Pickup location set!");
+            } else if (!deliveryMarker) {
+                deliveryMarker = L.marker(latlng).addTo(map)
+                    .bindPopup("📦 Delivery Location").openPopup();
+                document.getElementById("deliveryLocation").innerText = `Lat: ${latlng.lat}, Lng: ${latlng.lng}`;
+                alert("✅ Delivery location set!");
+
+                // 🚀 调用路线绘制函数
+                drawRoute(pickupMarker.getLatLng(), deliveryMarker.getLatLng());
+            }
+        });
+
+        // 🚗 获取 OSRM 路线
+        function drawRoute(start, end) {
+            let url = `https://router.project-osrm.org/route/v1/driving/${start.lng},${start.lat};${end.lng},${end.lat}?overview=full&geometries=geojson`;
+
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.code !== "Ok") {
+                        alert("🚨 路线获取失败，请重试！");
+                        return;
+                    }
+
+                    // 清除旧路线
+                    if (routeLine) map.removeLayer(routeLine);
+
+                    // 🚀 在地图上绘制路线
+                    routeLine = L.geoJSON(data.routes[0].geometry, {
+                        style: { color: "blue", weight: 5 }
+                    }).addTo(map);
+
+                    // 🔍 自动调整地图视图
+                    map.fitBounds(routeLine.getBounds());
+                })
+                .catch(error => {
+                    alert("❌ 路线数据请求失败！");
+                    console.error("Error fetching route:", error);
+                });
         }
 
-        function updateStatus(orderId, newStatus) {
-            orders = orders.map(order => order.id === orderId ? { ...order, status: newStatus } : order);
-            localStorage.setItem("deliveryOrders", JSON.stringify(orders));
-            loadOrders();
-        }
+        // ❌ 重新选择 Pickup & Delivery
+        function resetMarkers() {
+            if (pickupMarker) { map.removeLayer(pickupMarker); pickupMarker = null; }
+            if (deliveryMarker) { map.removeLayer(deliveryMarker); deliveryMarker = null; }
+            if (routeLine) { map.removeLayer(routeLine); routeLine = null; }
 
-        window.onload = loadOrders;
+            document.getElementById("pickupLocation").innerText = "Not Set";
+            document.getElementById("deliveryLocation").innerText = "Not Set";
+            alert("📍 位置已重置，请重新选择！");
+        }
     </script>
+
 </body>
 </html>
