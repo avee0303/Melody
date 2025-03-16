@@ -1,3 +1,29 @@
+<?php
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "rider_orders";
+
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    if (isset($_POST['accept'])) {
+        $id = $_POST['accept'];
+        $conn->query("UPDATE orders SET status='accepted' WHERE id=$id");
+    } elseif (isset($_POST['reject'])) {
+        $id = $_POST['reject'];
+        $conn->query("DELETE FROM orders WHERE id=$id");
+    }
+}
+
+$newOrders = $conn->query("SELECT * FROM orders WHERE status='pending'");
+$acceptedOrders = $conn->query("SELECT * FROM orders WHERE status='accepted'");
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>

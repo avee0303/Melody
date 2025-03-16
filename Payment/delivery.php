@@ -31,8 +31,6 @@ if ($result->num_rows > 0) {
 }
 $conn->close();
 ?>
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -45,16 +43,23 @@ $conn->close();
         body {
             font-family: Arial, sans-serif;
             text-align: center;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
         }
         .container {
-            max-width: 800px;
+            width: 100%;
+            max-width: 400px;
             margin: auto;
-            padding: 20px;
+            padding: 15px;
+            background: white;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
         }
         #map {
-            height: 400px;
+            height: 300px;
             width: 100%;
-            margin: 10px auto;
+            margin: 10px 0;
             border-radius: 8px;
             border: 2px solid #ddd;
         }
@@ -65,7 +70,9 @@ $conn->close();
             cursor: pointer;
             border-radius: 5px;
             border: none;
-            font-size: 16px;
+            font-size: 14px;
+            width: 100%;
+            margin-top: 10px;
         }
         button:hover {
             background-color: #0056b3;
@@ -74,8 +81,9 @@ $conn->close();
             background: #f8f9fa;
             padding: 10px;
             border-radius: 5px;
-            margin-top: 10px;
             box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+            font-size: 14px;
+            text-align: left;
         }
         .info-box p {
             margin: 5px 0;
@@ -83,67 +91,52 @@ $conn->close();
     </style>
 </head>
 <body>
-
     <div class="container">
-        <h1>Rider Delivery System</h1>
+        <h1>Rider Delivery</h1>
         <p>Click "Start Delivery" to begin navigation.</p>
-
         <div class="info-box">
             <h2>Current Delivery</h2>
             <p><strong>Pickup:</strong> <span id="pickupLocation">Loading...</span></p>
             <p><strong>Delivery:</strong> <span id="deliveryLocation">Loading...</span></p>
-            <p><strong>Estimated Distance:</strong> <span id="distance">-</span> km</p>
-            <p><strong>Estimated Time:</strong> <span id="duration">-</span> minutes</p>
+            <p><strong>Distance:</strong> <span id="distance">-</span> km</p>
+            <p><strong>Time:</strong> <span id="duration">-</span> min</p>
             <button onclick="startDelivery()">Start Delivery</button>
         </div>
-
         <h2>Navigation</h2>
         <div id="map"></div>
     </div>
 
     <script>
-        // 初始化地图
-        let map = L.map('map').setView([3.139, 101.686], 12);
+        let map = L.map('map').setView([2.1896, 102.2501], 13);
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '© OpenStreetMap'
         }).addTo(map);
 
         let pickupMarker, deliveryMarker, routeLine;
 
-        // 订单数据（示例）
         let orderData = {
-            pickup: { lat: 3.1478, lng: 101.6953, name: "KLCC, Kuala Lumpur" },
-            delivery: { lat: 3.1284, lng: 101.6337, name: "Mid Valley, Kuala Lumpur" }
+            pickup: { lat: 2.1889, lng: 102.2490, name: "Burger King, Melaka" },
+            delivery: { lat: 2.2064, lng: 102.2462, name: "No. 25, Taman Kota Laksamana, Melaka" }
         };
 
-        // 自动填充 Pickup & Delivery 地址
         document.getElementById("pickupLocation").innerText = orderData.pickup.name;
         document.getElementById("deliveryLocation").innerText = orderData.delivery.name;
 
-        // 启动配送功能
         function startDelivery() {
-            let pickup = orderData.pickup;
-            let delivery = orderData.delivery;
-
-            // 清除旧的标记和路线
             if (pickupMarker) map.removeLayer(pickupMarker);
             if (deliveryMarker) map.removeLayer(deliveryMarker);
             if (routeLine) map.removeLayer(routeLine);
 
-            // 标记取货和送货地点
-            pickupMarker = L.marker([pickup.lat, pickup.lng]).addTo(map)
+            pickupMarker = L.marker([orderData.pickup.lat, orderData.pickup.lng]).addTo(map)
                 .bindPopup("📍 Pickup Location").openPopup();
-            deliveryMarker = L.marker([delivery.lat, delivery.lng]).addTo(map)
+            deliveryMarker = L.marker([orderData.delivery.lat, orderData.delivery.lng]).addTo(map)
                 .bindPopup("📦 Delivery Location").openPopup();
 
-            // 获取路线信息
-            drawRoute(pickup, delivery);
+            drawRoute(orderData.pickup, orderData.delivery);
         }
 
-        // 调用 OSRM API 获取路径
         function drawRoute(start, end) {
             let url = `https://router.project-osrm.org/route/v1/driving/${start.lng},${start.lat};${end.lng},${end.lat}?overview=full&geometries=geojson`;
-
             fetch(url)
                 .then(response => response.json())
                 .then(data => {
@@ -151,22 +144,12 @@ $conn->close();
                         alert("🚨 Route fetching failed, please try again!");
                         return;
                     }
-
                     let route = data.routes[0];
-                    let distance_km = (route.distance / 1000).toFixed(2);
-                    let duration_min = Math.ceil(route.duration / 60);
+                    document.getElementById("distance").innerText = (route.distance / 1000).toFixed(2);
+                    document.getElementById("duration").innerText = Math.ceil(route.duration / 60);
 
-                    // 显示预计距离和时间
-                    document.getElementById("distance").innerText = distance_km;
-                    document.getElementById("duration").innerText = duration_min;
-
-                    // 清除旧路线并添加新路线
                     if (routeLine) map.removeLayer(routeLine);
-                    routeLine = L.geoJSON(route.geometry, {
-                        style: { color: "blue", weight: 5 }
-                    }).addTo(map);
-
-                    // 调整视图以适应路线
+                    routeLine = L.geoJSON(route.geometry, { style: { color: "blue", weight: 4 } }).addTo(map);
                     map.fitBounds(routeLine.getBounds());
                 })
                 .catch(error => {
@@ -175,6 +158,5 @@ $conn->close();
                 });
         }
     </script>
-
 </body>
 </html>
