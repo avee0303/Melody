@@ -175,9 +175,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
 
         function addTip(amount) {
-            tipAmount = amount;
-            updateOrderSummary();
-        }
+    if (tipAmount === amount) {
+        tipAmount = 0; // 取消小费
+    } else {
+        tipAmount = amount;
+    }
+    updateOrderSummary();
+}
 
         function openAddressForm() {
             document.getElementById('addressForm').style.display = 'block';

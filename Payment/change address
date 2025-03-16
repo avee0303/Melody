@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Checkout</title>
     <link rel="stylesheet" href="styles.css">
-    <style>
+    <style>   
         body {
             font-family: Arial, sans-serif;
             background-color: #f8f8f8;
@@ -103,13 +103,16 @@
         </div>
 
         <div class="section">
-            <h3>Tip Your Rider (Optional)</h3>
-            <div class="tip-buttons">
-                <button onclick="addTip(1.00)">RM 1.00</button>
-                <button onclick="addTip(2.00)">RM 2.00</button>
-                <button onclick="addTip(3.00)">RM 3.00</button>
-                <button onclick="addTip(4.00)">RM 4.00</button>
+            <div class="section">
+                <h3>Tip Your Rider (Optional)</h3>
+                <div class="tip-buttons">
+                    <button onclick="addTip(1.00)">RM 1.00</button>
+                    <button onclick="addTip(2.00)">RM 2.00</button>
+                    <button onclick="addTip(3.00)">RM 3.00</button>
+                    <button onclick="addTip(4.00)">RM 4.00</button>
+                </div>
             </div>
+
         </div>
 
         <div class="section">
@@ -146,9 +149,14 @@
         }
 
         function addTip(amount) {
-            tipAmount = amount;
-            updateOrderSummary();
-        }
+    if (tipAmount === amount) {
+        tipAmount = 0; // 取消小费
+    } else {
+        tipAmount = amount;
+    }
+    updateOrderSummary();
+}
+
 
         function openAddressForm() {
             document.getElementById('addressForm').style.display = 'block';
