@@ -127,7 +127,7 @@
 
     <script>
         let orders = [
-            { name: "Loaded Potato Bowl", price: 6.90 },
+            { name: "Spicy Tendercrip", price: 18.90 },
             { name: "Packaging Fee", price: 2.00 },
             { name: "Service Tax", price: 0.24 }
         ];
@@ -156,6 +156,11 @@
     }
     updateOrderSummary();
 }
+function togglePaymentDetails() {
+            let method = document.getElementById('paymentMethod').value;
+            let details = document.getElementById('paymentDetails');
+            details.innerHTML = method === "credit-card" ? '<input type="text" placeholder="Card Number">' : '';
+        }
 
 
         function openAddressForm() {

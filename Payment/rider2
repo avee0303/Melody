@@ -10,39 +10,49 @@
         body {
             font-family: Arial, sans-serif;
             text-align: center;
-            background-color: #f8f9fa;
+            background-color: #d2b48c;
             margin: 0;
             padding: 0;
         }
-        .container {
-            width: 100%;
-            max-width: 400px;
-            margin: auto;
+        .navbar {
+            background: #8b5a2b;
             padding: 15px;
-            background: white;
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .container {
+            width: 90%;
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            background: #f5deb3;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
             border-radius: 10px;
+            border: 5px solid #8b5a2b;
         }
         #map {
             height: 300px;
             width: 100%;
             margin: 10px 0;
             border-radius: 8px;
-            border: 2px solid #ddd;
+            border: 2px solid #654321;
         }
         button {
-            background-color: #007bff;
+            background-color: #8b5a2b;
             color: white;
             padding: 10px 15px;
             cursor: pointer;
             border-radius: 5px;
             border: none;
-            font-size: 14px;
+            font-size: 16px;
             width: 100%;
             margin-top: 10px;
+            transition: background 0.3s ease;
         }
         button:hover {
-            background-color: #0056b3;
+            background-color: #654321;
         }
         .info-box {
             background: #f8f9fa;
@@ -51,13 +61,23 @@
             box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
             font-size: 14px;
             text-align: left;
+            border: 2px solid #8b5a2b;
         }
         .info-box p {
             margin: 5px 0;
         }
+        @media (max-width: 600px) {
+            .container {
+                padding: 15px;
+            }
+            .navbar {
+                font-size: 20px;
+            }
+        }
     </style>
 </head>
 <body>
+    <div class="navbar">Rider Delivery System</div>
     <div class="container">
         <h1>Rider Delivery</h1>
         <p>Click "Start Delivery" to begin navigation.</p>
@@ -116,7 +136,7 @@
                     document.getElementById("duration").innerText = Math.ceil(route.duration / 60);
 
                     if (routeLine) map.removeLayer(routeLine);
-                    routeLine = L.geoJSON(route.geometry, { style: { color: "blue", weight: 4 } }).addTo(map);
+                    routeLine = L.geoJSON(route.geometry, { style: { color: "#8b5a2b", weight: 4 } }).addTo(map);
                     map.fitBounds(routeLine.getBounds());
                 })
                 .catch(error => {
