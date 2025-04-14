@@ -113,53 +113,75 @@
                 <button onclick="updateQuantity(1, 0)">+</button>
             </div>
         </div>
+        <div class="cart-item" id="item1">
+            <img src="spicy.jpg" alt="Whopper">
+            <div class="item-details">
+                <h3>Whopper</h3>
+                <p>RM 12.90</p>
+            </div>
+            <div class="quantity">
+                <button onclick="updateQuantity(-1, 1)">-</button>
+                <span id="qty1">1</span>
+                <button onclick="updateQuantity(1, 1)">+</button>
+            </div>
+        </div>
         
-        <h3>Total: RM <span id="totalPrice">18.40</span></h3>
+        <h3>Total: RM <span id="totalPrice">18.90</span></h3>
         <button class="checkout-btn" onclick="checkout()">Proceed to Checkout</button>
     </div>
+    
+
     
     <div class="footer">&copy; 2025 Burger King. All Rights Reserved.</div>
 
     <script>
-        let prices = [12.90, 5.50];
-        let quantities = [1, 1];
+      let prices = [18.90, 12.90];  // Fries 和 Whopper 的价格
+    let quantities = [1, 1];      // 初始数量
 
-        function updateQuantity(change, index) {
-            if (quantities[index] + change > 0) {
-                quantities[index] += change;
-                document.getElementById('qty' + index).innerText = quantities[index];
-                updateTotal();
-            } else {
-                removeItem(index);
-            }
-        }
-
-        function removeItem(index) {
-            document.getElementById('item' + index).remove();
-            prices[index] = 0;
-            quantities[index] = 0;
+    function updateQuantity(change, index) {
+        if (quantities[index] + change > 0) {
+            quantities[index] += change;
+            document.getElementById('qty' + index).innerText = quantities[index];
             updateTotal();
+        } else {
+            removeItem(index);
         }
+    }
 
-        function updateTotal() {
-            let total = 0;
-            for (let i = 0; i < prices.length; i++) {
-                total += prices[i] * quantities[i];
-            }
-            document.getElementById('totalPrice').innerText = total.toFixed(2);
-        }
-        function checkout() {
-    let cartItems = [
-        {
-            name: "Fries",
-            price: 18.90,
-            quantity: parseInt(document.getElementById("qty0").innerText)
-        }
-    ];
 
-    localStorage.setItem("cartItems", JSON.stringify(cartItems)); // Store in local storage
-    window.location.href = 'change address.html';
+    function removeItem(index) {
+        document.getElementById('item' + index).remove();
+        prices[index] = 0;
+        quantities[index] = 0;
+        updateTotal();
+    }
+
+    function updateTotal() {
+    let total = 0;
+    for (let i = 0; i < prices.length; i++) {
+        total += prices[i] * quantities[i];  // 计算所有商品总价
+    }
+    document.getElementById('totalPrice').innerText = total.toFixed(2); // 更新总价
 }
+
+
+    function checkout() {
+        let cartItems = [
+            {
+                name: "Fries",
+                price: 18.90,
+                quantity: parseInt(document.getElementById("qty0").innerText)
+            },
+            {
+                name: "Whopper",
+                price: 12.90,
+                quantity: parseInt(document.getElementById("qty1").innerText)
+            }
+        ];
+        localStorage.setItem("cartItems", JSON.stringify(cartItems));
+        window.location.href = 'payment.php';
+    }
+    updateTotal();
 
     </script>
 </body>
