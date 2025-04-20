@@ -135,7 +135,7 @@ $conn->close();
         let pickupMarker, deliveryMarker, routeLine;
 
         let orderData = {
-            pickup: { lat: 2.1889, lng: 102.2490, name: "Burger King, Melaka" },
+            pickup: { lat: 2.1889, lng: 102.2490, name: "Burger 4.0, Melaka" },
             delivery: { lat: 2.2064, lng: 102.2462, name: "No. 25, Taman Kota Laksamana, Melaka" }
         };
 

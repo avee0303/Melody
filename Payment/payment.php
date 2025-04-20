@@ -165,16 +165,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <label><input type="radio" name="delivery" value="2.40" onclick="updateDelivery(this)"> Priority (5-20 min) + RM 2.40</label>
         </div>
 
-        <div class="section">
-            <h3>Payment Method</h3>
-            <select id="paymentMethod" onchange="togglePaymentDetails()">
-                <option value="tng">Touch 'n Go eWallet</option>
-                <option value="credit-card">Credit/Debit Card</option>
-                <option value="bank">Online Banking</option>
-                <option value="cash">Cash on Delivery</option>
-            </select>
-            <div id="paymentDetails"></div>
-        </div>
+        <h3>Payment Method</h3>
+
+<label>
+    <input type="radio" name="paymentMethod" value="credit-card" onchange="togglePaymentDetails()">
+    Credit Card
+</label><br>
+
+<label>
+    <input type="radio" name="paymentMethod" value="cash" onchange="togglePaymentDetails()">
+    Cash
+</label><br>
+
+
+<div id="paymentDetails"></div>
+
 
         <div class="section">
             <h3>Promo Code</h3>
@@ -321,12 +326,49 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         let subtotal = orders.reduce((sum, item) => sum + item.price * (item.quantity || 1), 0);
         updateOrderSummary(subtotal);
     }
-
     function togglePaymentDetails() {
-        let method = document.getElementById('paymentMethod').value;
-        let details = document.getElementById('paymentDetails');
-        details.innerHTML = method === "credit-card" ? '<input type="text" placeholder="Card Number">' : '';
+    let selected = document.querySelector('input[name="paymentMethod"]:checked');
+    let details = document.getElementById('paymentDetails');
+
+    if (selected && selected.value === "credit-card") {
+        details.innerHTML = `
+            <input type="text" id="cardNumber" placeholder="Card Number" name="cardNumber" maxlength="19" required><br>
+            <input type="text" id="expDate" placeholder="Expiration Date (MM/YY)" name="expDate"
+                pattern="^(0[1-9]|1[0-2])\\/\\d{2}$" maxlength="5" title="Format must be MM/YY" required><br>
+            <input type="text" placeholder="Security Code (CVV)" name="cvv"
+                pattern="\\d{3}" maxlength="3" inputmode="numeric" title="Must be 3 digits" required>
+        `;
+
+        // Add event listener for Expiration Date formatting
+        const expDateInput = document.getElementById('expDate');
+        expDateInput.addEventListener('input', function(e) {
+            let value = e.target.value.replace(/[^0-9]/g, '');
+
+            if (value.length >= 2) {
+                value = value.slice(0, 2) + '/' + value.slice(2, 4);
+            }
+
+            e.target.value = value.slice(0, 5); // limit to 5 characters total (MM/YY)
+        });
+
+        // Add event listener for Card Number formatting
+        const cardNumberInput = document.getElementById('cardNumber');
+        cardNumberInput.addEventListener('input', function(e) {
+            let value = e.target.value.replace(/[^0-9]/g, '');
+            let formattedValue = '';
+
+            for (let i = 0; i < value.length; i += 4) {
+                formattedValue += value.slice(i, i + 4) + ' ';
+            }
+
+            e.target.value = formattedValue.trim().slice(0, 19); // limit to 16 digits and spaces
+        });
+    } else {
+        details.innerHTML = '';
     }
+}
+
+
 
     function openAddressForm() {
         document.getElementById('addressForm').style.display = 'block';

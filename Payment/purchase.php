@@ -9,7 +9,7 @@ if ($conn->connect_error) {
 // Orders array (simulated data)
 $orders = [
     [
-        "checkout_id" => 1,
+        
         "image" => "burgerking.jpg",
         "name" => "Whopper Meal",
         "order_date" => "2025-03-10 14:30:00",
@@ -17,7 +17,7 @@ $orders = [
         "price" => 15.90
     ],
     [
-        "checkout_id" => 2,
+        
         "image" => "doublewhopper.jpg",
         "name" => "Double Whopper Cheese Meal",
         "order_date" => "2025-03-05 12:15:00",
@@ -25,7 +25,7 @@ $orders = [
         "price" => 18.50
     ],
     [
-        "checkout_id" => 3,
+        
         "image" => "chickenroyale.jpg",
         "name" => "Chicken Royale Meal",
         "order_date" => "2025-02-25 18:45:00",
@@ -35,13 +35,12 @@ $orders = [
 ];
 
 // Prepare SQL statement to insert into history
-$stmt = $conn->prepare("INSERT INTO history (checkout_id, image, name, order_date, description, price) VALUES (?, ?, ?, ?, ?, ?)");
+$stmt = $conn->prepare("INSERT INTO history (image, name, order_date, description, price) VALUES (?, ?, ?, ?, ?, ?)");
 
 // Loop through each order and execute the insert
 foreach ($orders as $order) {
     $stmt->bind_param(
-        "issssd",
-        $order['checkout_id'],
+        
         $order['image'],
         $order['name'],
         $order['order_date'],
@@ -49,11 +48,7 @@ foreach ($orders as $order) {
         $order['price']
     );
 
-    if ($stmt->execute()) {
-        echo "Order #{$order['checkout_id']} saved successfully.<br>";
-    } else {
-        echo "Error saving Order #{$order['checkout_id']}: " . $stmt->error . "<br>";
-    }
+    
 }
 
 // Close the statement and connection
@@ -182,7 +177,7 @@ $conn->close();
 <body>
 
     <div class="container">
-        <h2>🍔 Burger  - Order History</h2>
+        <h2>🍔 Burger 4.0 - Order History</h2>
 
         <!-- Order 1 -->
         <div class="order-card" data-id="1">

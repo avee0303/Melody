@@ -143,7 +143,7 @@ function calculateTotal() {
             <img src="fries.jpg" alt="Whopper">
             <div class="item-details">
                 <h3>Fries</h3>
-                <p>RM 18.90</p>
+                <p id="itemTotal0">RM 18.90</p>
             </div>
             <div class="quantity">
                 <button onclick="updateQuantity(-1, 0)">-</button>
@@ -155,7 +155,7 @@ function calculateTotal() {
             <img src="spicy.jpg" alt="Whopper">
             <div class="item-details">
                 <h3>Whopper</h3>
-                <p>RM 12.90</p>
+                <p id="itemTotal1">RM 12.90</p>
             </div>
             <div class="quantity">
                 <button onclick="updateQuantity(-1, 1)">-</button>
@@ -197,28 +197,43 @@ function calculateTotal() {
     function updateTotal() {
     let total = 0;
     for (let i = 0; i < prices.length; i++) {
-        total += prices[i] * quantities[i];  // 计算所有商品总价
+        const itemTotal = prices[i] * quantities[i];
+        total += itemTotal;
+        const itemTotalElement = document.getElementById('itemTotal' + i);
+        if (itemTotalElement) {
+            itemTotalElement.innerText = "RM " + itemTotal.toFixed(2);
+        }
     }
-    document.getElementById('totalPrice').innerText = total.toFixed(2); // 更新总价
+    document.getElementById('totalPrice').innerText = total.toFixed(2);
 }
 
 
-    function checkout() {
-        let cartItems = [
-            {
-                name: "Fries",
-                price: 18.90,
-                quantity: parseInt(document.getElementById("qty0").innerText)
-            },
-            {
-                name: "Whopper",
-                price: 12.90,
-                quantity: parseInt(document.getElementById("qty1").innerText)
+
+function checkout() {
+    let cartItems = [];
+
+    for (let i = 0; i < prices.length; i++) {
+        const qtyElement = document.getElementById("qty" + i);
+        if (qtyElement) {
+            const quantity = parseInt(qtyElement.innerText);
+            if (quantity > 0) {
+                cartItems.push({
+                    name: i === 0 ? "Fries" : "Whopper",
+                    price: prices[i],
+                    quantity: quantity
+                });
             }
-        ];
+        }
+    }
+
+    if (cartItems.length > 0) {
         localStorage.setItem("cartItems", JSON.stringify(cartItems));
         window.location.href = 'payment.php';
+    } else {
+        alert("Your cart is empty!");
     }
+}
+
     updateTotal();
 
     </script>
