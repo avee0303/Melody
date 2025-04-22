@@ -1,5 +1,5 @@
 <?php
-include 'db_connect.php';
+include("config/db_connect.php");
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $name = $_POST['name'];
@@ -22,6 +22,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add Category</title>
+
+    <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
     <h2>Add New Category</h2>
@@ -34,5 +36,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         <button type="submit">Add Category</button>
     </form>
+
+    <script src="js/scripts.js" defer></script>
 </body>
 </html>
