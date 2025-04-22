@@ -1,0 +1,110 @@
+/* Global Styles */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f8f9fa;
+    margin: 0;
+    padding: 0;
+}
+
+/* Navbar styling */
+.navbar {
+    background-color: #de6f00;
+    padding: 15px;
+    color: white;
+    text-align: center;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Logo Styling */
+.logo {
+    height: 100px; /* Adjust size */
+    margin-right: 15px;
+}
+
+.login-container {
+    text-align: center;
+    margin-top: 50px;
+}
+
+.login-container .logo {
+    height: 130px;
+    margin-bottom: 15px;
+}
+
+/* Dashboard Styling */
+.container {
+    width: 80%;
+    margin: auto;
+    padding: 20px;
+}
+
+/* Buttons */
+.btn {
+    display: inline-block;
+    padding: 10px 15px;
+    color: white;
+    background-color: #e08d27;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    border-radius: 5px;
+}
+
+.btn:hover {
+    background-color: #cc7000;
+}
+
+/* Tables */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+}
+
+th, td {
+    padding: 10px;
+    border: 1px solid #ddd;
+    text-align: center;
+}
+
+th {
+    background-color: #de9424;
+    color: white;
+}
+
+.form-vertical {
+    max-width: 400px;
+    margin: 0 auto;
+    }
+
+    .form-vertical div {
+        margin-bottom: 20px; /* Increased space between inputs */
+    }
+
+    .form-vertical label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+    }
+
+    .form-vertical input {
+        width: 100%;
+        padding: 10px;
+        box-sizing: border-box;
+    }
+
+    .form-vertical button {
+        padding: 10px 20px;
+        background-color:rgb(227, 166, 88);
+        color: white;
+        border: none;
+        cursor: pointer;
+        border-radius: 4px;
+    }
+
+    .form-vertical button:hover {
+        background-color:rgb(196, 144, 1);
+    }
