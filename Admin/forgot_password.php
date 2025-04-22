@@ -1,12 +1,12 @@
 <?php
-include 'db_connect.php';
+include("config/db_connect.php");
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $_POST['email'];
     $token = bin2hex(random_bytes(50)); // Generate secure token
 
     // Check if email exists
-    $query = $conn->prepare("SELECT * FROM admin WHERE email = ?");
+    $query = $conn->prepare("SELECT * FROM superadmin WHERE email = ?");
     $query->bind_param("s", $email);
     $query->execute();
     $result = $query->get_result();
@@ -30,6 +30,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <html lang="en">
 <head>
     <title>Forgot Password</title>
+
+    <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
     <h2>Forgot Password</h2>
@@ -41,5 +43,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <input type="email" name="email" required>
         <button type="submit">Send Reset Link</button>
     </form>
+
+    <script src="js/scripts.js" defer></script>
 </body>
 </html>

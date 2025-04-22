@@ -1,6 +1,6 @@
 <?php
 session_start();
-include 'db_connect.php';
+include("config/db_connect.php");
 
 // Fetch Categories
 $categoryQuery = $conn->query("SELECT * FROM categories");
@@ -12,7 +12,8 @@ $categoryQuery = $conn->query("SELECT * FROM categories");
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Manage Categories</title>
-    <link rel="stylesheet" href="styles.css">
+
+    <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
     <h2>Manage Categories</h2>
@@ -39,5 +40,7 @@ $categoryQuery = $conn->query("SELECT * FROM categories");
         </tr>
         <?php endwhile; ?>
     </table>
+
+    <script src="js/scripts.js" defer></script>
 </body>
 </html>

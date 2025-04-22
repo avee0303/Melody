@@ -1,5 +1,5 @@
 <?php
-include 'db_connect.php';
+include("config/db_connect.php");
 
 if (isset($_GET['token'])) {
     $token = $_GET['token'];
@@ -32,6 +32,8 @@ if (isset($_GET['token'])) {
 <html lang="en">
 <head>
     <title>Reset Password</title>
+
+    <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
     <h2>Reset Password</h2>
@@ -40,5 +42,7 @@ if (isset($_GET['token'])) {
         <input type="password" name="password" required>
         <button type="submit">Reset Password</button>
     </form>
+
+    <script src="js/scripts.js" defer></script>
 </body>
 </html>

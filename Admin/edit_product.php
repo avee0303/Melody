@@ -1,5 +1,5 @@
 <?php
-include 'db_connect.php';
+include("config/db_connect.php");
 
 if (isset($_GET['id'])) {
     $id = $_GET['id'];
@@ -38,28 +38,76 @@ if (isset($_GET['id'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Product</title>
+    <title>Update Product</title>
+
+    <link rel="stylesheet" href="css/styles.css">
 </head>
+<style>
+    .form-vertical {
+        max-width: 400px;
+        margin: 0 auto;
+    }
+
+    .form-vertical div {
+        margin-bottom: 20px; /* Increased space between inputs */
+    }
+
+    .form-vertical label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+    }
+
+    .form-vertical input {
+        width: 100%;
+        padding: 10px;
+        box-sizing: border-box;
+    }
+
+    .form-vertical button {
+        padding: 10px 20px;
+        background-color:rgb(227, 166, 88);
+        color: white;
+        border: none;
+        cursor: pointer;
+        border-radius: 4px;
+    }
+
+    .form-vertical button:hover {
+        background-color:rgb(196, 144, 1);
+    }
+</style>
 <body>
-    <h2>Edit Product</h2>
+    <h2>Update Product</h2>
 
     <?php if (isset($error)) echo "<p class='error'>$error</p>"; ?>
 
-    <form method="POST" enctype="multipart/form-data">
-        <label>Name:</label>
-        <input type="text" name="name" value="<?= $product['name'] ?>" required>
+    <form method="POST" class="form-vertical">
+    <div>
+        <label for="name">Product Name</label><br>
+        <input type="text" id="name" name="name" value="<?= $product['name'] ?>" required>
+    </div>
 
-        <label>Description:</label>
-        <textarea name="description" required><?= $product['description'] ?></textarea>
+    <div>
+        <label for="description">Description</label><br>
+        <input type="text" id="description" name="description" value="<?= $product['description'] ?>" required>
+    </div>
 
-        <label>Price:</label>
-        <input type="number" step="0.01" name="price" value="<?= $product['price'] ?>" required>
+    <div>
+        <label for="price">Price</label><br>
+        <input type="number" id="price" name="price" value="<?= $product['price'] ?>" required>
+    </div>
 
-        <label>Image:</label>
-        <input type="file" name="image">
-        <img src="<?= $product['image'] ?>" width="50">
+    <div>
+        <label for="image">Image</label><br>
+        <input type="file" id="image" name="image" img src="<?= $product['image'] ?>"width="50" required>
+    </div>
 
-        <button type="submit">Update Product</button>
-    </form>
+    <div>
+        <button type="submit">Update</button>
+    </div>
+</form>
+    
+    <script src="js/scripts.js" defer></script>
 </body>
 </html>

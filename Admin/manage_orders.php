@@ -1,6 +1,6 @@
 <?php
 session_start();
-include 'db_connect.php';
+include("config/db_connect.php");
 
 // Fetch Orders
 $orderQuery = $conn->query("SELECT * FROM orders");
@@ -12,7 +12,8 @@ $orderQuery = $conn->query("SELECT * FROM orders");
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Manage Orders</title>
-    <link rel="stylesheet" href="styles.css">
+
+    <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
     <h2>Manage Orders</h2>
@@ -45,5 +46,7 @@ $orderQuery = $conn->query("SELECT * FROM orders");
         </tr>
         <?php endwhile; ?>
     </table>
+
+    <script src="js/scripts.js" defer></script>
 </body>
 </html>

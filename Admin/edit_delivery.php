@@ -1,5 +1,5 @@
 <?php
-include 'db_connect.php';
+include("config/db_connect.php");
 
 if (isset($_GET['id'])) {
     $id = $_GET['id'];
@@ -32,6 +32,8 @@ if (isset($_GET['id'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Update Delivery</title>
+
+    <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
     <h2>Update Delivery</h2>
@@ -55,5 +57,7 @@ if (isset($_GET['id'])) {
 
         <button type="submit">Update</button>
     </form>
+
+    <script src="js/scripts.js" defer></script>
 </body>
 </html>

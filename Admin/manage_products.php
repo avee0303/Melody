@@ -1,6 +1,6 @@
 <?php
 session_start();
-include 'db_connect.php';
+include("config/db_connect.php");
 
 // Fetch Products
 $productQuery = $conn->query("SELECT * FROM products");
@@ -12,7 +12,8 @@ $productQuery = $conn->query("SELECT * FROM products");
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Manage Products</title>
-    <link rel="stylesheet" href="styles.css">
+
+    <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
     <h2>Manage Products</h2>
@@ -34,7 +35,9 @@ $productQuery = $conn->query("SELECT * FROM products");
         <?php while ($product = $productQuery->fetch_assoc()): ?>
         <tr>
             <td><?= $product['id'] ?></td>
-            <td><img src="<?= $product['image'] ?>" width="50"></td>
+            <td>
+                <img src="uploads/<?= $product['image'] ?>" width="50">
+            </td>
             <td><?= $product['name'] ?></td>
             <td><?= $product['description'] ?></td>
             <td>$<?= $product['price'] ?></td>
@@ -45,5 +48,7 @@ $productQuery = $conn->query("SELECT * FROM products");
         </tr>
         <?php endwhile; ?>
     </table>
+
+    <script src="js/scripts.js" defer></script>
 </body>
 </html>
