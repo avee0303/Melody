@@ -161,7 +161,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <div class="section">
             <h3>Delivery Options</h3>
             <label><input type="radio" name="delivery" value="-1.40" onclick="updateDelivery(this)"> Economy (20-35 min) - RM 1.40 off</label><br>
-            <label><input type="radio" name="delivery" value="0" checked onclick="updateDelivery(this)"> Standard (10-25 min)</label><br>
+            <label><input type="radio" name="delivery" value="0" checked onclick="updateDelivery(this)"> Standard (9-25 min)</label><br>
             <label><input type="radio" name="delivery" value="2.40" onclick="updateDelivery(this)"> Priority (5-20 min) + RM 2.40</label>
         </div>
 
