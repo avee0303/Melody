@@ -173,6 +173,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </label><br>
 
 <label>
+    <input type="radio" name="paymentMethod" value="TNG ewallet" onchange="togglePaymentDetails()">
+    TNG eWallet
+</label><br>
+
+<label>
     <input type="radio" name="paymentMethod" value="cash" onchange="togglePaymentDetails()">
     Cash
 </label><br>
@@ -216,27 +221,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     let tipAmount = 0;
     let discount = 0;
 
-    // Unified window.onload function
     window.onload = function () {
-        loadCartItems(); // Load cart items
+        loadCartItems(); 
         const now = new Date();
 
-        // Get current date in YYYY-MM-DD format
         const date = now.toISOString().split('T')[0]; 
 
-        // Get current time in HH:MM:SS format
+        
         const time = now.toTimeString().split(' ')[0];
 
-        // Check if the elements exist before trying to display the date and time
+        
         const dateElement = document.getElementById("visibleDate");
         const timeElement = document.getElementById("visibleTime");
 
         if (dateElement && timeElement) {
-            // Display date and time on the page
+            
             dateElement.textContent = date;
             timeElement.textContent = time;
 
-            // Optionally store the date and time in hidden inputs (if required for form submission)
+            
             document.getElementById("checkoutDate").value = date;
             document.getElementById("checkoutTime").value = time;
         } else {
@@ -257,13 +260,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         });
 
         orders = [...storedCartItems];
-        updateOrderSummary(subtotal); // Pass the subtotal for further calculation
+        updateOrderSummary(subtotal); 
     }
 
-    // Apply promo code functionality
+  
     const promoCodes = {
-        "DISCOUNT10": 10.00, // Direct discount of 10 RM
-        "SAVE5": 5.00        // Direct discount of 5 RM
+        "DISCOUNT10": 10.00, 
+        "SAVE5": 5.00        
     };
 
     function updateOrderSummary(subtotal) {
@@ -272,10 +275,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         let total = subtotal + tipAmount + deliveryCharge - discount + packagingFee + serviceTax;
         let orderSummaryDiv = document.getElementById('orderSummary');
 
-        // Clear previous order summary to prevent duplication
+        
         orderSummaryDiv.innerHTML = "";
 
-        // Re-add items to the order summary
+        
         orders.forEach(item => {
             let itemTotal = item.price * (item.quantity || 1);
             orderSummaryDiv.innerHTML += `<p>${item.name} (x${item.quantity || 1}) - RM ${itemTotal.toFixed(2)}</p>`;
@@ -309,7 +312,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         document.getElementById("discountInfo").style.color = "red";
     }
 
-    // Calculate current subtotal before calling updateOrderSummary
+    
     let subtotal = orders.reduce((sum, item) => sum + item.price * (item.quantity || 1), 0);
     updateOrderSummary(subtotal);
 }
@@ -339,7 +342,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 pattern="\\d{3}" maxlength="3" inputmode="numeric" title="Must be 3 digits" required>
         `;
 
-        // Add event listener for Expiration Date formatting
         const expDateInput = document.getElementById('expDate');
         expDateInput.addEventListener('input', function(e) {
             let value = e.target.value.replace(/[^0-9]/g, '');
@@ -348,10 +350,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 value = value.slice(0, 2) + '/' + value.slice(2, 4);
             }
 
-            e.target.value = value.slice(0, 5); // limit to 5 characters total (MM/YY)
+            e.target.value = value.slice(0, 5); 
         });
 
-        // Add event listener for Card Number formatting
+
         const cardNumberInput = document.getElementById('cardNumber');
         cardNumberInput.addEventListener('input', function(e) {
             let value = e.target.value.replace(/[^0-9]/g, '');
@@ -361,7 +363,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 formattedValue += value.slice(i, i + 4) + ' ';
             }
 
-            e.target.value = formattedValue.trim().slice(0, 19); // limit to 16 digits and spaces
+            e.target.value = formattedValue.trim().slice(0, 19); 
         });
     } else {
         details.innerHTML = '';
@@ -402,7 +404,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         alert("Your order has been placed successfully!");
     }
 
-    // Initialize order summary
+
     updateOrderSummary();
     </script>
 </body>
