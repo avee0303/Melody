@@ -18,7 +18,15 @@ $categoryQuery = $conn->query("SELECT * FROM categories");
 <body>
     <h2>Manage Categories</h2>
 
-    <?php if (isset($_GET['success'])) echo "<p class='success'>{$_GET['success']}</p>"; ?>
+    <?php if (isset($_GET['success'])): ?>
+        <p style="color: green; font-weight: bold;">
+            <?= htmlspecialchars($_GET['success']) ?>
+        </p>
+    <?php endif; ?>
+
+    <?php if (isset($error)): ?>
+    <p style="color: red;"><?php echo $error; ?></p>
+    <?php endif; ?>
 
     <a href="add_category.php">Add New Category</a>
 
@@ -35,7 +43,7 @@ $categoryQuery = $conn->query("SELECT * FROM categories");
             <td><?= $category['name'] ?></td>
             <td>
                 <a href="edit_category.php?id=<?= $category['id'] ?>">Edit</a>
-                <a href="delete_category.php?id=<?= $category['id'] ?>" onclick="return confirm('Are you sure?')">Delete</a>
+                <a href="delete_category.php?id=<?= $category['id'] ?>">Delete</a>
             </td>
         </tr>
         <?php endwhile; ?>

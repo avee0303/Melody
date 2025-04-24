@@ -7,33 +7,27 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['add_staff'])) {
     $name = trim($_POST['name']);
     $email = trim($_POST['email']);
     $phone = trim($_POST['phone']);
-    $role = trim($_POST['role']);
     $password = $_POST['password'];
+    $status = $_POST['status'];
 
-    // Validate email format
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $error = "Invalid email format.";
-    }
-    // Validate phone: must start with +60 and be 12 or 13 characters total
-    elseif (!preg_match("/^\+60\d{9,10}$/", $phone)) {
+    } elseif (!preg_match("/^\+60\d{9,10}$/", $phone)) {
         $error = "Phone number must start with +60 and be 12 or 13 digits in total.";
-    }
-    // Validate password
-    elseif (
+    } elseif (
         strlen($password) < 8 ||
-        !preg_match('/[A-Z]/', $password) ||         // at least one uppercase
-        !preg_match('/[a-z]/', $password) ||         // at least one lowercase
-        !preg_match('/[0-9]/', $password) ||         // at least one number
-        !preg_match('/[\W_]/', $password) ||         // at least one special char
-        stripos($password, $email) !== false         // should not contain email
+        !preg_match('/[A-Z]/', $password) ||
+        !preg_match('/[a-z]/', $password) ||
+        !preg_match('/[0-9]/', $password) ||
+        !preg_match('/[\W_]/', $password) ||
+        stripos($password, $email) !== false
     ) {
-        $error = "Password must be at least 8 characters, include upper and lower case letters, a number, a special character, and not contain your email.";
-    }
-    else {
+        $error = "Password must meet complexity requirements and not contain your email.";
+    } else {
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
-        $stmt = $conn->prepare("INSERT INTO admin (name, email, phone, role, password) VALUES (?, ?, ?, ?, ?)");
-        $stmt->bind_param("sssss", $name, $email, $phone, $role, $hashedPassword);
+        $stmt = $conn->prepare("INSERT INTO admin (name, email, phone, password, status) VALUES (?, ?, ?, ?, ?)");
+        $stmt->bind_param("sssss", $name, $email, $phone, $hashedPassword, $status);
 
         if ($stmt->execute()) {
             header("Location: manage_staffs.php");
@@ -46,7 +40,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['add_staff'])) {
 
 // Fetch Staff Members
 $staffQuery = $conn->query("SELECT * FROM admin");
-
 ?>
 
 <!DOCTYPE html>
@@ -55,38 +48,37 @@ $staffQuery = $conn->query("SELECT * FROM admin");
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Manage Staff</title>
-
     <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
-    <h2>Manage Staff</h2>
+    <h2>Manage Staffs</h2>
+
+    <?php if (isset($_GET['success'])): ?>
+        <p style="color: green; font-weight: bold;">
+            <?= htmlspecialchars($_GET['success']) ?>
+        </p>
+    <?php endif; ?>
 
     <?php if (isset($error)): ?>
     <p style="color: red;"><?php echo $error; ?></p>
     <?php endif; ?>
 
     <form method="POST">
-    <input type="text" name="name" placeholder="Full Name" required>
-    <br><br>
+        <input type="text" name="name" placeholder="Full Name" required><br><br>
+        <input type="email" name="email" placeholder="Email" required><br><br>
+        <input type="text" name="phone" placeholder="Phone (e.g., +601122223333)" required><br>
+        <small style="color: gray;">*Phone must start with +60 and be 12 or 13 digits.</small><br><br>
+        <input type="password" name="password" placeholder="Password" required><br>
+        <small style="color: gray;">*Password must meet all security rules and not contain email.</small><br><br>
+        
+        <label>Status: </label>
+        <select name="status" required>
+            <option value="active">Active</option>
+            <option value="inactive">Inactive</option>
+        </select><br><br>
 
-    <input type="email" name="email" placeholder="Email" required>
-    <br><br>
-
-    <input type="text" name="phone" placeholder="Phone(e.g., +601122223333)" required>
-    <br>
-    <small style="color: gray;">*Phone number must start with +60 and be 12 or 13 digits in total.</small>
-    <br><br>
-
-    <input type="text" name="role" placeholder="Role(e.g., Manager)" required>
-    <br><br>
-
-    <input type="password" name="password" placeholder="Password" required>
-    <br>
-    <small style="color: gray;">*Password must be at least 8 characters, include upper and lower case letters, a number, a special character, and not contain your email.</small>
-    <br><br>
-
-    <button type="submit" name="add_staff">Add</button>
-</form>
+        <button type="submit" name="add_staff">Add</button>
+    </form>
 
     <h3>Staff List</h3>
     <table border="1">
@@ -95,7 +87,7 @@ $staffQuery = $conn->query("SELECT * FROM admin");
             <th>Name</th>
             <th>Email</th>
             <th>Phone</th>
-            <th>Role</th>
+            <th>Status</th>
             <th>Actions</th>
         </tr>
         <?php while ($staff = $staffQuery->fetch_assoc()): ?>
@@ -104,10 +96,11 @@ $staffQuery = $conn->query("SELECT * FROM admin");
             <td><?= $staff['name'] ?></td>
             <td><?= $staff['email'] ?></td>
             <td><?= $staff['phone'] ?></td>
-            <td><?= $staff['role'] ?></td>
+            <td style="color: <?= $staff['status'] == 'active' ? 'green' : 'red' ?>">
+                <?= ucfirst($staff['status']) ?>
+            </td>
             <td>
                 <a href="edit_staff.php?id=<?= $staff['id'] ?>">Edit</a>
-                <a href="delete_staff.php?id=<?= $staff['id'] ?>" onclick="return confirm('Are you sure?')">Delete</a>
             </td>
         </tr>
         <?php endwhile; ?>

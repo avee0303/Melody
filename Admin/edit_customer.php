@@ -3,7 +3,7 @@ include("config/db_connect.php");
 
 if (isset($_GET['id'])) {
     $id = $_GET['id'];
-    $customer = $conn->query("SELECT * FROM customers WHERE id = $id")->fetch_assoc();
+    $customer = $conn->query("SELECT * FROM customer WHERE id = $id")->fetch_assoc();
 
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $name = $_POST['name'];
@@ -11,7 +11,7 @@ if (isset($_GET['id'])) {
         $phone = $_POST['phone'];
         $address = $_POST['address'];
 
-        $stmt = $conn->prepare("UPDATE customers SET name=?, email=?, phone=?, address=? WHERE id=?");
+        $stmt = $conn->prepare("UPDATE customer SET name=?, email=?, phone=?, address=? WHERE id=?");
         $stmt->bind_param("ssssi", $name, $email, $phone, $address, $id);
         
         if ($stmt->execute()) {
@@ -79,12 +79,12 @@ if (isset($_GET['id'])) {
     <form method="POST" class="form-vertical">
     <div>
         <label for="name">Full Name</label><br>
-        <input type="text" id="name" name="name" value="<?= $customer['name'] ?>" required>
+        <input type="text" id="name" name="name" value="<?= $customer['name'] ?>" readonly>
     </div>
 
     <div>
         <label for="email">Email</label><br>
-        <input type="email" id="email" name="email" value="<?= $customer['email'] ?>" required>
+        <input type="email" id="email" name="email" value="<?= $customer['email'] ?>" readonly>
     </div>
 
     <div>

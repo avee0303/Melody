@@ -9,11 +9,11 @@ if (isset($_GET['id'])) {
         $name = $_POST['name'];
         $email = $_POST['email'];
         $phone = $_POST['phone'];
-        $role = $_POST['role'];
 
-        $stmt = $conn->prepare("UPDATE admin SET name=?, email=?, phone=?, role=? WHERE id=?");
-        $stmt->bind_param("ssssi", $name, $email, $phone, $role, $id);
-        
+        $status = $_POST['status'];
+        $stmt = $conn->prepare("UPDATE admin SET name=?, email=?, phone=?, status=? WHERE id=?");
+        $stmt->bind_param("ssssi", $name, $email, $phone, $status, $id);
+
         if ($stmt->execute()) {
             header("Location: manage_staffs.php?success=Staff updated successfully");
             exit();
@@ -79,12 +79,12 @@ if (isset($_GET['id'])) {
     <form method="POST" class="form-vertical">
     <div>
         <label for="name">Full Name</label><br>
-        <input type="text" id="name" name="name" value="<?= $staff['name'] ?>" required>
+        <input type="text" id="name" name="name" value="<?= $staff['name'] ?>" readonly>
     </div>
 
     <div>
         <label for="email">Email</label><br>
-        <input type="email" id="email" name="email" value="<?= $staff['email'] ?>" required>
+        <input type="email" id="email" name="email" value="<?= $staff['email'] ?>" readonly>
     </div>
 
     <div>
@@ -93,8 +93,11 @@ if (isset($_GET['id'])) {
     </div>
 
     <div>
-        <label for="role">Role</label><br>
-        <input type="text" id="role" name="role" value="<?= $staff['role'] ?>" required>
+        <label for="status">Status</label><br>
+        <select id="status" name="status" required>
+            <option value="Active" <?= $staff['status'] === 'Active' ? 'selected' : '' ?>>Active</option>
+            <option value="Inactive" <?= $staff['status'] === 'Inactive' ? 'selected' : '' ?>>Inactive</option>
+        </select>
     </div>
 
     <div>

@@ -32,7 +32,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['add_customer'])) {
     else {
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
-        $stmt = $conn->prepare("INSERT INTO customers (name, email, phone, address , password) VALUES (?, ?, ?, ?, ?)");
+        $stmt = $conn->prepare("INSERT INTO customer (name, email, phone, address , password) VALUES (?, ?, ?, ?, ?)");
         $stmt->bind_param("sssss", $name, $email, $phone, $address, $hashedPassword);
 
         if ($stmt->execute()) {
@@ -46,7 +46,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['add_customer'])) {
 }
 
 // Fetch Customers
-$customerQuery = $conn->query("SELECT * FROM customers");
+$customerQuery = $conn->query("SELECT * FROM customer");
 ?>
 
 <!DOCTYPE html>
@@ -61,9 +61,16 @@ $customerQuery = $conn->query("SELECT * FROM customers");
 <body>
     <h2>Manage Customers</h2>
 
+    <?php if (isset($_GET['success'])): ?>
+        <p style="color: green; font-weight: bold;">
+            <?= htmlspecialchars($_GET['success']) ?>
+        </p>
+    <?php endif; ?>
+
     <?php if (isset($error)): ?>
     <p style="color: red;"><?php echo $error; ?></p>
     <?php endif; ?>
+
 
     <form method="POST">
     <input type="text" name="name" placeholder="Full Name" required>

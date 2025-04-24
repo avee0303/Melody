@@ -1,7 +1,7 @@
 <?php
 session_start();
 if (!isset($_SESSION['admin_id'])) {
-    header("Location: admin_login.php");
+    header("Location: superadmin_login.php");
     exit();
 }
 ?>
@@ -11,7 +11,7 @@ if (!isset($_SESSION['admin_id'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard</title>
+    <title>Superadmin Dashboard</title>
     
     <link rel="stylesheet" href="css/styles.css">
 
@@ -58,20 +58,21 @@ if (!isset($_SESSION['admin_id'])) {
 <body>
     <div class="navbar">
         <img src="images/4.0logo.jpg" alt="4.0 Burger Logo" class="logo">
-        Burger King Admin Panel
+        Burger King Superadmin Panel
     </div>
 
-    <h2>Welcome, Admin!</h2>
+    <h2>Welcome, Superadmin!</h2>
     
     <div class="button-container">
-        <a href="manage_customers.php" class="admin-button">Manage Customers</a>
-        <a href="manage_categories.php" class="admin-button">Manage Categories</a>
-        <a href="manage_products.php" class="admin-button">Manage Products</a>
-        <a href="manage_orders.php" class="admin-button">Manage Orders</a>
-        <a href="manage_deliveries.php" class="admin-button">Manage Deliveries</a>
+        <a href="manage_staffs.php" class="admin-button">Manage Staffs</a>
+        <a href="view_customers.php" class="admin-button">View Customers</a>
+        <a href="view_categories.php" class="admin-button">View Categories</a>
+        <a href="view_products.php" class="admin-button">View Products</a>
+        <a href="view_orders.php" class="admin-button">View Orders</a>
+        <a href="view_deliveries.php" class="admin-button">View Deliveries</a>
     </div>
 
-    <a href="logout.php" class="logout-link">Logout</a>
+    <a href="superadmin_logout.php" class="logout-link">Logout</a>
 
     <script src="js/scripts.js" defer></script>
 </body>
