@@ -6,7 +6,7 @@ $error_message = '';
 if (isset($_POST["login"])) {
     $email = $_POST["email"];
     $password = $_POST["password"];
-    $conn = mysqli_connect("localhost", "root", "", "payment");
+    $conn = mysqli_connect("localhost", "root", "", "database");
 
     $sql = "SELECT * FROM users WHERE email = '" . $email . "'";
     $result = mysqli_query($conn, $sql);

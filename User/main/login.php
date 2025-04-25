@@ -287,7 +287,7 @@ img {
 
 <div class="container" id="container">
     <div class="form-container sign-up">
-        <form action="register_handler.php" method="POST">
+        <form action="register_handler.php" method="POST">  
             <h1>Create Account</h1>
             <span>Use your details to register</span>
             <input type="text" name="first_name" placeholder="First Name" required>
