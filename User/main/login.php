@@ -1,27 +1,283 @@
 <?php
-// To show success or error message if coming from register_handler.php
-$success_message = $success_message ?? '';
-$error_message = $error_message ?? '';
+session_start();
+$success_message = $_SESSION['success_message'] ?? '';
+$error_message = $_SESSION['error_message'] ?? '';
+unset($_SESSION['success_message'], $_SESSION['error_message']);
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Login / Register</title>
     <link rel="stylesheet" href="login.css">
+    <style>
+        * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: antiquewhite;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    height: 75vh;
+}
+
+nav {
+    width: 97%;
+    height: 70px;
+    background-color: blanchedalmond;
+    display: flex;
+    margin-top: 0%;
+}
+
+.container {
+    background-color: #fff;
+    border-radius: 30px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.35);
+    position: relative;
+    overflow: hidden;
+    width: 768px;
+    max-width: 100%;
+    min-height: 560px; /* increased height for extra inputs */
+}
+
+.container p {
+    font-size: 14px;
+    line-height: 20px;
+    letter-spacing: 0.3px;
+    margin: 20px 0;
+}
+
+.container span {
+    font-size: 12px;
+}
+
+.container a {
+    color: #333;
+    font-size: 13px;
+    text-decoration: none;
+    margin: 15px 0 10px;
+}
+
+.container button {
+    background-color: rgb(177, 143, 91);
+    color: #fff;
+    font-size: 12px;
+    padding: 10px 45px;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    margin-top: 10px;
+    cursor: pointer;
+}
+
+.container button:hover {
+    background-color: rgb(134, 85, 13);
+}
+
+.container button.hidden {
+    background-color: transparent;
+    border-color: #fff;
+}
+
+.container form {
+    background-color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding: 0 40px;
+    height: 100%;
+}
+
+.container input,
+.container select,
+.container input[type="date"] {
+    background-color: #eee;
+    border: none;
+    margin: 8px 0;
+    padding: 10px 15px;
+    font-size: 13px;
+    border-radius: 8px;
+    width: 100%;
+    outline: none;
+}
+
+/* Optional: Add a dropdown arrow style for select */
+.container select {
+    background-image: url("data:image/svg+xml;utf8,<svg fill='gray' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 16px;
+    padding-right: 35px;
+}
+
+.form-container {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    transition: all 0.6s ease-in-out;
+}
+
+.sign-in {
+    left: 0;
+    width: 50%;
+    z-index: 2;
+}
+
+.container.active .sign-in {
+    transform: translateX(100%);
+}
+
+.sign-up {
+    left: 0;
+    width: 50%;
+    opacity: 0;
+    z-index: 1;
+}
+
+.container.active .sign-up {
+    transform: translateX(100%);
+    opacity: 1;
+    z-index: 5;
+    animation: move 0.6s;
+}
+
+@keyframes move {
+    0%, 49.99% {
+        opacity: 0;
+        z-index: 1;
+    }
+    50%, 100% {
+        opacity: 1;
+        z-index: 5;
+    }
+}
+
+.social-icons {
+    margin: 20px 0;
+}
+
+.social-icons a {
+    border: 1px solid #ccc;
+    border-radius: 20%;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 3px;
+    width: 40px;
+    height: 40px;
+}
+
+.toggle-container {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 50%;
+    height: 100%;
+    overflow: hidden;
+    transition: all 0.6s ease-in-out;
+    border-radius: 150px 0 0 100px;
+    z-index: 1000;
+}
+
+.container.active .toggle-container {
+    transform: translateX(-100%);
+    border-radius: 0 150px 100px 0;
+}
+
+.toggle {
+    background-color: rgb(80, 35, 20);
+    height: 100%;
+    color: #fff;
+    position: relative;
+    left: -100%;
+    height: 100%;
+    width: 200%;
+    transform: translateX(0);
+    transition: all 0.6s ease-in-out;
+}
+
+.container.active .toggle {
+    transform: translateX(50%);
+}
+
+.toggle-panel {
+    position: absolute;
+    width: 50%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding: 0 30px;
+    text-align: center;
+    top: 0;
+    transform: translateX(0);
+    transition: all 0.6s ease-in-out;
+}
+
+.toggle-left {
+    transform: translateX(-200%);
+}
+
+.container.active .toggle-left {
+    transform: translateX(0);
+}
+
+.toggle-right {
+    right: 0;
+    transform: translateX(0);
+}
+
+.container.active .toggle-right {
+    transform: translateX(200%);
+}
+
+img {
+    height: 30px;
+    width: 30px;
+}
+
+.forgot-password:hover {
+    color: rgb(226, 57, 57);
+}
+
+.message {
+    font-weight: bold;
+    text-align: center;
+    margin-top: 20px;
+    padding: 10px 20px;
+    border-radius: 8px;
+    width: 100%;
+    max-width: 600px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+}
+
+.success {
+    color: green;
+    background-color: #e6ffe6;
+    border: 1px solid green;
+    margin-bottom: 10px;
+}
+
+.error {
+    color: red;
+    background-color: #ffe6e6;
+    border: 1px solid red;
+    margin-bottom: 10px;
+}
+
+    </style>
 </head>
 <body>
-
-<!-- Message outside the container -->
-<?php if ($success_message): ?>
-    <div style="color: green; font-weight: bold; margin: 10px; text-align: center;">
-        <?= $success_message ?>
-    </div>
-<?php elseif ($error_message): ?>
-    <div style="color: red; font-weight: bold; margin: 10px; text-align: center;">
-        <?= $error_message ?>
-    </div>
-<?php endif; ?>
 
 <nav>
     <a href="main.html">
@@ -33,10 +289,21 @@ $error_message = $error_message ?? '';
     <div class="form-container sign-up">
         <form action="register_handler.php" method="POST">
             <h1>Create Account</h1>
-            <span>Use your email for registration</span>
-            <input type="text" name="name" placeholder="Name" required>
+            <span>Use your details to register</span>
+            <input type="text" name="first_name" placeholder="First Name" required>
+            <input type="text" name="last_name" placeholder="Last Name" required>
             <input type="email" name="email" placeholder="Email" required>
-            <input type="password" name="password" placeholder="Password" required>
+            <input type="tel" name="phone" placeholder="e.g., 0123456789 or 60123456789" 
+                   pattern="^(\+60|60|0)\d{8,10}$" 
+                   title="Phone must be 10-12 digits (e.g., 0123456789 or 60123456789)" required>
+            <select name="gender" required>
+                <option value="" disabled selected>Select Gender</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Other">Other</option>
+            </select>
+            <input type="date" name="dob" required>
+            <input type="password" name="password" placeholder="Password" minlength="6" required>
             <button type="submit">Sign Up</button>
         </form>
     </div>
@@ -47,7 +314,7 @@ $error_message = $error_message ?? '';
             <span>Use your email and password</span>
             <input type="email" name="email" placeholder="Email" required>
             <input type="password" name="password" placeholder="Password" required>
-            <a href="#" class="forgot-password">Forget Your Password?</a>
+            <a href="forgot_password.php" class="forgot-password">Forget Your Password?</a>
             <button type="submit">Sign In</button>
         </form>
     </div>
@@ -67,6 +334,12 @@ $error_message = $error_message ?? '';
         </div>
     </div>
 </div>
+
+<?php if ($success_message): ?>
+    <div class="message success"><?= htmlspecialchars($success_message) ?></div>
+<?php elseif ($error_message): ?>
+    <div class="message error"><?= htmlspecialchars($error_message) ?></div>
+<?php endif; ?>
 
 <script src="script.js"></script>
 </body>

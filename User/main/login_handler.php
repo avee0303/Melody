@@ -1,10 +1,29 @@
 <?php
 session_start();
-include "connect.php";
 
-$email = $_POST['email'];
-$password = $_POST['password'];
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "users_db";
 
+// Connect to database
+$conn = new mysqli($servername, $username, $password, $dbname);
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+// Get inputs
+$email = trim($_POST['email'] ?? '');
+$password = $_POST['password'] ?? '';
+
+if (empty($email) || empty($password)) {
+    $_SESSION['error_message'] = "Please fill in all fields.";
+    $conn->close();
+    header("Location: login.php");
+    exit();
+}
+
+// Check user
 $sql = "SELECT * FROM users WHERE email=?";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("s", $email);
@@ -13,17 +32,35 @@ $result = $stmt->get_result();
 
 if ($result->num_rows === 1) {
     $user = $result->fetch_assoc();
+
     if (password_verify($password, $user['password'])) {
-        $_SESSION['user'] = [
-            'id' => $user['id'],
-            'name' => $user['name'],
-            'email' => $user['email']
-        ];
-        header("Location:  ../login/main2_page.php");
+        // Set session variables
+        $_SESSION['user_id'] = $user['id'];
+        $_SESSION['first_name'] = $user['first_name'];
+        $_SESSION['last_name'] = $user['last_name'];
+        $_SESSION['email'] = $user['email'];
+        $_SESSION['phone'] = $user['phone'];
+        $_SESSION['gender'] = $user['gender'];
+        $_SESSION['dob'] = $user['dob'];
+        $_SESSION['logged_in'] = true;
+
+        $stmt->close();
+        $conn->close();
+        header("Location: ../login/main2_page.php");
+
+        exit();
+    } else {
+        $_SESSION['error_message'] = "Incorrect password.";
+        $stmt->close();
+        $conn->close();
+        header("Location: login.php");
         exit();
     }
+} else {
+    $_SESSION['error_message'] = "User not found.";
+    $stmt->close();
+    $conn->close();
+    header("Location: login.php");
+    exit();
 }
-
-header("Location: login.php?login_error=Invalid credentials");
-exit();
 ?>

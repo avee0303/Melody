@@ -1,37 +1,82 @@
 <?php
-$success_message = '';
-$error_message = '';
+session_start();
 
-// Connect to DB
-$conn = new mysqli("localhost", "root", "", "users_db");
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "users_db";
 
-// Check connection
+// Create connection
+$conn = new mysqli($servername, $username, $password, $dbname);
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// Process registration
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $name = trim($_POST["name"]);
-    $email = trim($_POST["email"]);
-    $password = password_hash($_POST["password"], PASSWORD_DEFAULT);
+// Retrieve and sanitize form data
+$first_name = trim($_POST['first_name'] ?? '');
+$last_name = trim($_POST['last_name'] ?? '');
+$email = trim($_POST['email'] ?? '');
+$password = trim($_POST['password'] ?? '');
+$phone = trim($_POST['phone'] ?? '');
+$gender = $_POST['gender'] ?? '';
+$dob = $_POST['dob'] ?? '';
 
-    // Insert into database
-    $stmt = $conn->prepare("INSERT INTO users (name, email, password) VALUES (?, ?, ?)");
-    if ($stmt) {
-        $stmt->bind_param("sss", $name, $email, $password);
-        if ($stmt->execute()) {
-            $success_message = "✅ Registered successfully!";
-        } else {
-            $error_message = "❌ Email may already exist or error occurred.";
-        }
-        $stmt->close();
-    } else {
-        $error_message = "❌ Database error: " . $conn->error;
-    }
+$errors = [];
+
+// Validation
+if (empty($first_name)) $errors[] = "First name is required.";
+if (!preg_match('/^[a-zA-Z\s\-]+$/', $first_name)) $errors[] = "First name can only contain letters, spaces, and hyphens.";
+if (empty($last_name)) $errors[] = "Last name is required.";
+if (!preg_match('/^[a-zA-Z\s\-]+$/', $last_name)) $errors[] = "Last name can only contain letters, spaces, and hyphens.";
+if (!filter_var($email, FILTER_VALIDATE_EMAIL)) $errors[] = "Invalid email format.";
+if (strlen($password) < 6) $errors[] = "Password must be at least 6 characters.";
+if (!preg_match('/^(\+60|60|0)\d{8,10}$/', $phone)) $errors[] = "Phone must be 10-12 digits (e.g., 0123456789 or 60123456789).";
+if (empty($gender)) $errors[] = "Gender is required.";
+if (empty($dob)) $errors[] = "Date of birth is required.";
+
+// If validation fails
+if (!empty($errors)) {
+    $_SESSION['error_message'] = implode(" ", $errors);
+    $conn->close();
+    header("Location: login.php");
+    exit();
 }
-$conn->close();
-?>
 
-<!-- Redirect back to login.php with a success message -->
-<?php include 'login.php'; ?>
+// Normalize phone number
+$phone = preg_replace('/^(60|0)/', '+60', $phone);
+
+// Check if email exists
+$sql = "SELECT * FROM users WHERE email=?";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("s", $email);
+$stmt->execute();
+$result = $stmt->get_result();
+
+if ($result->num_rows > 0) {
+    $_SESSION['error_message'] = "Email already registered.";
+    $stmt->close();
+    $conn->close();
+    header("Location: login.php");
+    exit();
+}
+
+// Insert user
+$hashed_password = password_hash($password, PASSWORD_DEFAULT);
+$sql = "INSERT INTO users (first_name, last_name, email, password, phone, gender, dob) VALUES (?, ?, ?, ?, ?, ?, ?)";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("sssssss", $first_name, $last_name, $email, $hashed_password, $phone, $gender, $dob);
+
+if ($stmt->execute()) {
+    $_SESSION['success_message'] = "Registration successful! Please log in.";
+    $stmt->close();
+    $conn->close();
+    header("Location: login.php");
+    exit();
+} else {
+    $_SESSION['error_message'] = "Something went wrong. Please try again.";
+    $stmt->close();
+    $conn->close();
+    header("Location: login.php");
+    exit();
+}
+?>
