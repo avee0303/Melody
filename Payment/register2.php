@@ -70,7 +70,7 @@ if (isset($_POST['register'])) {
 </head>
 <body>
 
-<?php if ($success_message): ?>
+<?php if ($success_message): ?>  
     <div style="color: green; font-weight: bold; margin: 10px; text-align: center;">
         <?= $success_message ?>
     </div>
