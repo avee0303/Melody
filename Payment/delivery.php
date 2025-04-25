@@ -2,7 +2,7 @@
 $servername = "localhost";
 $username = "root";
 $password = "";
-$dbname = "payment";
+$dbname = "database"; // corrected database name
 
 $conn = new mysqli($servername, $username, $password, $dbname);
 
@@ -11,9 +11,8 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-$sql = "SELECT * FROM orders ORDER BY id DESC LIMIT 1";
+$sql = "SELECT * FROM delivery_system ORDER BY id DESC LIMIT 1";
 $result = $conn->query($sql);
-
 
 $orderData = [];
 if ($result->num_rows > 0) {
@@ -25,12 +24,14 @@ if ($result->num_rows > 0) {
 } else {
     // Default data if no orders exist
     $orderData = [
-        "pickup" => ["lat" => 3.1478, "lng" => 101.6953, "name" => "KLCC, Kuala Lumpur"],
-        "delivery" => ["lat" => 3.1284, "lng" => 101.6337, "name" => "Mid Valley, Kuala Lumpur"]
+        "pickup" => ["lat" => 2.1889, "lng" => 102.2490, "name" => "Burger King, Melaka"],
+        "delivery" => ["lat" => 2.2064, "lng" => 102.2462, "name" => "No. 25, Taman Kota Laksamana, Melaka"]
     ];
 }
+
 $conn->close();
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>

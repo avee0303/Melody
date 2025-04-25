@@ -32,7 +32,7 @@ if (isset($_POST['register'])) {
         $mail->send();
 
         $encrypted_password = password_hash($password, PASSWORD_DEFAULT);
-        $conn = mysqli_connect("localhost", "root", "", "payment");
+        $conn = mysqli_connect("localhost", "root", "", "database");
 
         if ($conn) {
             $check = mysqli_query($conn, "SELECT * FROM users WHERE email = '$email'");

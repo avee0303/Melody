@@ -1,6 +1,6 @@
 <?php
 session_start();
-$conn = new mysqli("localhost", "root", "", "payment");
+$conn = new mysqli("localhost", "root", "", "database");
 
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
@@ -28,7 +28,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         // Prepare and bind parameters
         $stmt = $conn->prepare($sql);
-        $stmt->bind_param("iissdddssss", $customer_id, $cart_id, $name, $address, $postcode, $paymentMethod, $tip, $deliveryCharge, $totalAmount, $checkoutLat, $checkoutLng);
+        $stmt->bind_param("iissssddddd", $customer_id, $cart_id, $name, $address, $postcode, $paymentMethod, $tip, $deliveryCharge, $totalAmount, $checkoutLat, $checkoutLng);
+
         
         // Execute and check if successful
         if ($stmt->execute()) {
@@ -329,6 +330,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         let subtotal = orders.reduce((sum, item) => sum + item.price * (item.quantity || 1), 0);
         updateOrderSummary(subtotal);
     }
+
     function togglePaymentDetails() {
     let selected = document.querySelector('input[name="paymentMethod"]:checked');
     let details = document.getElementById('paymentDetails');
@@ -343,16 +345,31 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         `;
 
         const expDateInput = document.getElementById('expDate');
-        expDateInput.addEventListener('input', function(e) {
-            let value = e.target.value.replace(/[^0-9]/g, '');
+expDateInput.addEventListener('input', function(e) {
+    let value = e.target.value.replace(/[^0-9]/g, '');
 
-            if (value.length >= 2) {
-                value = value.slice(0, 2) + '/' + value.slice(2, 4);
-            }
+    if (value.length >= 2) {
+        value = value.slice(0, 2) + '/' + value.slice(2, 4);
+    }
 
-            e.target.value = value.slice(0, 5); 
-        });
+    value = value.slice(0, 5); // MM/YY max length
+    e.target.value = value;
 
+    // Check if year > 28 (means after 2028)
+    if (value.length === 5) {
+        const [monthStr, yearStr] = value.split('/');
+        const year = parseInt(yearStr);
+        const month = parseInt(monthStr);
+
+        if (year > 28) {
+            alert("Expiration year cannot be after 2028.");
+            e.target.value = ''; // clear input
+        } else if (year === 28 && month > 12) {
+            alert("Invalid month in 2028.");
+            e.target.value = '';
+        }
+    }
+});
 
         const cardNumberInput = document.getElementById('cardNumber');
         cardNumberInput.addEventListener('input', function(e) {

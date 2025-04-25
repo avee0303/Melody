@@ -2,7 +2,7 @@
 if (isset($_POST["verify_email"])) {
     $email = $_POST["email"];
     $verification_code = $_POST["verification_code"];
-    $conn = mysqli_connect("localhost", "root", "", "payment");
+    $conn = mysqli_connect("localhost", "root", "", "database");
 
     $sql = "UPDATE users SET email_verified_at = NOW() WHERE email = '" . $email . "' AND verification_code = '" . $verification_code . "'";
 
