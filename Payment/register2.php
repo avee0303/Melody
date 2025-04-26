@@ -215,7 +215,6 @@ if (isset($_POST['register'])) {
 <nav>
     <!-- You can add a logo or links here -->
 </nav>
-
 <div class="container">
     <h1>Create Account</h1>
     <span>Use your details to register</span>
@@ -262,10 +261,17 @@ if (isset($_POST['register'])) {
            required 
            style="font-size: 16px; padding: 10px;">
     
+            <!-- Password requirements -->
+    <div id="password-requirements" style="margin-top:10px; font-size:14px;">
+        <p id="length" style="color: red;">✖ Minimum 8 characters</p>
+        <p id="letter" style="color: red;">✖ At least one letter (a–z, A–Z)</p>
+        <p id="number" style="color: red;">✖ At least one number (0–9)</p>
+        <p id="special" style="color: red;">✖ At least one special symbol (!@#$%^&*)</p>
+    </div>
+
     <button type="submit" name="register" 
             style="font-size: 16px; padding: 12px 20px;">Sign Up</button>
 </form>
-
 
     <div class="signin-link">
         <p>Already have an account? <a href="login2.php">Sign In</a></p>
