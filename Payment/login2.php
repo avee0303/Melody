@@ -1,5 +1,4 @@
 <?php
-
 $success_message = '';
 $error_message = '';
 
@@ -8,8 +7,15 @@ if (isset($_POST["login"])) {
     $password = $_POST["password"];
     $conn = mysqli_connect("localhost", "root", "", "database");
 
-    $sql = "SELECT * FROM users WHERE email = '" . $email . "'";
-    $result = mysqli_query($conn, $sql);
+    if (!$conn) {
+        die("Connection failed: " . mysqli_connect_error());
+    }
+
+    $sql = "SELECT * FROM users WHERE email = ?";
+    $stmt = mysqli_prepare($conn, $sql);
+    mysqli_stmt_bind_param($stmt, "s", $email);
+    mysqli_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
 
     if (mysqli_num_rows($result) == 0) {
         $error_message = "Email not found.";
@@ -17,15 +23,17 @@ if (isset($_POST["login"])) {
         $user = mysqli_fetch_object($result);
 
         if (!password_verify($password, $user->password)) {
-            $error_message = "Password is not correct";
+            $error_message = "Password is not correct.";
         } elseif ($user->email_verified_at == null) {
-            $error_message = "Please verify your email <a href='email-verification.php?email=" . $email . "'>from here</a>";
+            $error_message = "Please verify your email <a href='email-verification.php?email=" . htmlspecialchars($email) . "'>from here</a>";
         } else {
             $success_message = "Login successful! Welcome back!";
+            // Here you can create session and redirect if you want
         }
     }
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -72,7 +80,7 @@ if (isset($_POST["login"])) {
             <span>Use your email and password</span>
             <input type="email" name="email" placeholder="Email" required>
             <input type="password" name="password" placeholder="Password" required>
-            <a href="#" class="forgot-password">Forget Your Password?</a>
+            <a href="recover_psw.php" class="forgot-password">Forgot Your Password?</a>
             <button type="submit" name="login">Sign In</button>
         </form>
     </div>
