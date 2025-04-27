@@ -80,7 +80,7 @@ if (isset($_POST["login"])) {
             <span>Use your email and password</span>
             <input type="email" name="email" placeholder="Email" required>
             <input type="password" name="password" placeholder="Password" required>
-            <a href="recover_psw.php" class="forgot-password">Forgot Your Password?</a>
+            <a href="recover_psw2.php" class="forgot-password">Forgot Your Password?</a>
             <button type="submit" name="login">Sign In</button>
         </form>
     </div>
