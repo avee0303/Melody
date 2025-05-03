@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Contact Us - Burger 404</title>
+  <link rel="stylesheet" href="about.css"> 
+  <style>
+    /* Same styling as your About page (reused or moved to a CSS file) */
+    body { background-color: antiquewhite; font-family: Arial, sans-serif; }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    nav {
+      width: 100%;
+      height: 70px;
+      background-color: blanchedalmond;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+      position: fixed;
+      z-index: 1000;
+    }
+
+    nav ul {
+      display: flex;
+      gap: 20px;
+      list-style: none;
+    }
+
+    nav ul li {
+      position: relative;
+    }
+
+    nav ul li a {
+      font-size: 20px;
+      font-family: 'Impact';
+      color: rgb(177, 143, 91);
+      text-decoration: none;
+      padding: 10px;
+      display: block;
+    }
+
+    nav ul li a:hover {
+      color: rgb(222, 73, 73);
+    }
+
+    nav ul li ul {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      background-color: blanchedalmond;
+      border-radius: 8px;
+      padding: 10px 0;
+      min-width: 180px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      z-index: 999;
+    }
+
+    nav ul li:hover > ul {
+      display: block;
+    }
+
+    nav ul li ul li {
+      width: 100%;
+    }
+
+    nav ul li ul li a {
+      font-size: 18px;
+      color: rgb(177, 143, 91);
+      text-decoration: none;
+      padding: 8px 20px;
+      display: block;
+      font-family: 'Impact';
+    }
+
+    nav ul li ul li a:hover {
+      color: rgb(222, 73, 73);
+      background-color: rgba(255, 235, 205, 0.4);
+    }
+
+    nav .logo {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    nav .logo img {
+      width: 220px;
+      padding-top: 25px;
+    }
+
+    .login {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      color: grey;
+      font-size: 16px;
+      font-weight: bold;
+      text-decoration: none;
+    }
+
+    .login:hover {
+      color: black;
+    }
+
+    .login img {
+      width: 24px;
+      height: 24px;
+    }
+
+    .contact-header {
+      color: rgb(245, 235, 220);
+      background-color: rgb(80, 35, 20);
+      height: 230px;
+      font-size: 30px;
+      font-family: 'flame', "Cooper Black", "Helvetica Neue", Helvetica, Arial, sans-serif;
+      padding-top: 70px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .contact-container {
+      max-width: 800px;
+      margin: 40px auto;
+      padding: 20px;
+      background-color: #fff6e8;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+    }
+    h2 { font-size: 28px; color: #5c3317; margin-bottom: 20px; }
+    p, label { color: #7a5c40; font-size: 16px; line-height: 1.6; }
+    form { display: flex; flex-direction: column; gap: 15px; }
+    input, textarea {
+      padding: 10px;
+      border: 1px solid #d3b592;
+      border-radius: 6px;
+      font-size: 16px;
+    }
+    button {
+      padding: 10px 20px;
+      background-color: #e67e00;
+      color: white;
+      border: none;
+      font-weight: bold;
+      cursor: pointer;
+      border-radius: 6px;
+    }
+    button:hover { background-color: #cc6f00; }
+  </style>
+</head>
+<body>
+
+  <!-- Include the same nav as your About page -->
+  <nav>
+    <ul>
+      <li><a href="menu2.html">Menu</a></li>
+      <li><a href="offer2.html">Offers</a></li>
+      <li>
+        <a href="#">More</a>
+        <ul>
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="contact.html">Contact Us</a></li>
+          <li><a href="career.html">Career</a></li>
+        </ul>
+      </li>
+    </ul>
+    <a href="main2_page.php" class="logo"><img src="burger_404_transparent.png" alt="Logo"></a>
+    <a href="profile.php" class="login">
+      <img src="user.png" alt="login"><p>PROFILE</p>
+    </a>
+  </nav>
+
+  <header class="contact-header"><h1>CONTACT US</h1></header>
+
+  <div class="contact-container">
+    <h2>We'd love to hear from you!</h2>
+    <p>Have questions, suggestions, or just want to say hi? Fill out the form below or reach out through our contact info.</p>
+    <form>
+      <label for="name">Name:</label>
+      <input type="text" id="name" placeholder="Your Name" required>
+
+      <label for="email">Email:</label>
+      <input type="email" id="email" placeholder="Your Email" required>
+
+      <label for="message">Message:</label>
+      <textarea id="message" rows="6" placeholder="Type your message here..." required></textarea>
+
+      <button type="submit">Send Message</button>
+    </form>
+    <p style="margin-top: 20px;">📧 Email us at <strong>support@burger404.com</strong> or call 📞 <strong>+123-456-7890</strong></p>
+  </div>
+
+</body>
+</html>

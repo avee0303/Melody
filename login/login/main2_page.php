@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Burger</title>
+    <link rel="stylesheet" href="main2.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+      body{
+    background-color: antiquewhite;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+nav {
+    width: 100%;
+    height: 70px;
+    background-color: blanchedalmond;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px; 
+    position: fixed;
+    z-index: 1000;
+}
+
+nav ul {
+    display: flex;
+    gap: 20px; 
+    list-style: none;
+}
+
+nav ul li {
+    list-style: none;
+}
+
+nav ul li a {
+    font-size: 20px;
+    font-family: 'Impact';
+    color: rgb(177, 143, 91);
+    text-decoration: none;
+}
+
+nav .logo {
+    display: flex;
+    justify-content: center;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+nav .logo img {
+    width: 220px;
+    height: auto;
+    padding-top: 25px;
+}
+
+
+nav ul li a:hover {
+    color: rgb(222, 73, 73);
+}
+
+
+nav ul li ul {
+    display: none;
+    position: absolute;
+    background-color: blanchedalmond;
+    padding: 10px;
+    border-radius: 8px;
+    z-index: 1000; 
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.5); 
+}
+
+nav ul li:hover ul {
+    display: block;
+}
+
+nav ul li ul li {
+    width: 180px;
+    border-radius: 4px;
+    padding: 10px;
+}
+
+nav ul li ul li a {
+    padding: 8px 14px;
+}
+
+nav ul li ul li a:hover {
+    background-color: rgb(222, 213, 213);
+}
+
+.nav-icons {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.cart-icon {
+    position: relative;
+    color: rgb(177, 143, 91);
+    font-size: 24px;
+    text-decoration: none;
+}
+
+.cart-count {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background: rgb(222, 73, 73);
+    color: white;
+    border-radius: 50%;
+    width: 18px;
+    height: 18px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 11px;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+.login {
+    display: flex;
+    flex-direction: column; 
+    align-items: center; 
+    text-decoration: none;
+    color: grey;
+    font-size: 16px;
+    font-weight: bold;
+    font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+.login:hover,
+.cart-icon:hover {   
+    color: black;
+}
+
+.login img {
+    width: 24px; 
+    height: 24px;
+}
+
+.container {
+    width: 100vw;
+    height: 60vh;
+    padding: 0;
+    overflow: hidden;
+    position: relative;
+    padding-top: 70px;
+}
+
+.slider-wrapper {
+    width: 100vw;
+    height: 60vh;
+    margin: 0 auto;
+}
+
+.slider {
+    display: flex;
+    width: 100vw;
+    height: 60vh;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    border-radius: 5px;
+}
+
+.slider img {
+    flex: 1 0 100%;
+    width: 100vw;
+    height: 60vh;
+    scroll-snap-align: start;
+    object-fit: cover;
+}
+
+
+.slider-nav {
+    display: flex;
+    column-gap: 1rem;
+    position: absolute;
+    bottom: 1.25rem;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1;
+}
+
+.slider-nav a {
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    background-color: #fff;
+    opacity: 0.75;
+    transition: opacity ease 250ms;
+}
+
+.slider-nav a:hover {
+    opacity: 1;
+}
+
+.box{
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: auto auto;
+    gap: 15px;
+    max-width: 1200px;
+    margin: auto;
+    padding: 20px;
+}
+
+.promo-box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.promo-box img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    border-radius: 10px;
+    border: solid 3px white; 
+}
+
+.large {
+    grid-column: span 1; 
+}
+
+.small {
+    grid-column: span 1; 
+}
+
+.redeem{
+    display: grid;
+    max-width: 1200px;
+    margin: auto;
+    padding: 20px;
+}
+
+.redeem img{
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+}
+
+.made-To-order {
+    background: url('1250964-tomato-slice.jpg') no-repeat center center/cover;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    height: 300px; 
+    padding: 50px 20px;
+    position: relative;
+}
+
+.made-To-order .content {
+    max-width: 600px;
+}
+
+.made-To-order .title {
+    font-size: 2.8rem;
+    font-family: 'flame', "Cooper Black", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    color: white;
+    text-transform: uppercase;
+}
+
+.made-To-order .subtitle {
+    font-size: 1.3rem;
+    color: white;
+    font-weight: bold;
+    margin-bottom: 50px;
+}
+
+.made-To-order .btn {
+    display: inline-block;
+    background: blanchedalmond; 
+    color: black;
+    font-size: 1rem;
+    padding: 14px 200px;
+    border-radius: 25px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: 0.3s ease-in-out;
+}
+
+.made-To-order .btn:hover {
+    background: #b71c1c;
+}
+    </style>
+</head>
+<body>
+<nav>
+      <ul>
+        <li><a href="menu2.html">Menu</a></li>
+        <li><a href="offer2.html">Offers</a></li>
+        <li><a href="#">More</a>
+          <ul>
+            <li><a href="about.html">About Us</a></li>
+            <li><a href="contact.html">Contact Us</a></li>
+            <li><a href="career.html">Career</a></li>
+          </ul>
+        </li>
+      </ul>
+    <a href="main2_page.php" class="logo">
+        <img src="burger_404_transparent.png" alt="Logo">
+    </a>
+
+    <div class="nav-icons">
+      <a href="#" class="cart-icon">
+        <i class="fas fa-shopping-cart"></i>
+        <span class="cart-count">0</span>
+      </a>
+      <a href="profile.php" class="login">
+        <img src="user.png" alt="login">
+        <p>PROFILE</p>
+      </a>
+    </div>
+
+  </nav>
+
+    <section class="container">
+      <div class="slider-wrapper">
+        <div class="slider">
+          <img id="slide-1" src="AIBURGER.png" alt="Slide 1">
+          <img id="slide-2" src="slide 3.jpg" alt="Slide 2">
+          <img id="slide-3" src="slide 2.jpg" alt="Slide 3">
+        </div>
+        <div class="slider-nav">
+          <a data-slide="0"></a>
+          <a data-slide="1"></a>
+          <a data-slide="2"></a>
+        </div>
+      </div>
+    </section>
+    
+    <div class="box">
+        <a href="promotions.html">
+            <div class="promo-box 1"><img src="promotionburger.jpg" alt="1"></div>
+        </a>
+        <a href="bundle.html">
+            <div class="promo-box 1"><img src="bundlepromotion.jpg" alt="2"></div>
+        </a>
+        <a href="">
+            <div class="promo-box 2"><img src="slide 2.jpg" alt="3"></div>
+        </a>
+        <a href="">
+            <div class="promo-box 2"><img src="slide 2.jpg" alt="4"></div>
+        </a>
+    </div>
+
+    <div class="redeem">
+        <a href="feedback.php">
+            <div class="redeem-1"><img src="redeem.png" alt=""></div>
+        </a>
+    </div>
+          
+
+    <section class="made-To-order">
+      <div class="row-content">
+        <h3 class="title" style="font-family: Impact;">
+          <span>MADE TO ORDER</span>
+        </h3>
+        <h4 class="subtitle"> 
+        Every Burger 
+        <br>
+        is made to order.
+        </h4>
+        <a class="btn" style="margin: 0 auto;" href="made_To_order.html">Take a look</a>
+      </div>
+    </section>
+
+
+    <script>
+      const slider = document.querySelector('.slider');
+      const slides = document.querySelectorAll('.slider img');
+      const navLinks = document.querySelectorAll('.slider-nav a');
+
+      let index = 0;
+      setInterval(() => {
+        index = (index + 1) % slides.length;
+        scrollToSlide(index);
+      }, 5000);
+    
+
+      navLinks.forEach((dot, i) => {
+        dot.addEventListener('click', (e) => {
+          e.preventDefault(); 
+          index = i;
+          scrollToSlide(index);
+        });
+      });
+    
+      function scrollToSlide(i) {
+        slider.scrollTo({
+          left: slider.clientWidth * i,
+          behavior: 'smooth'
+        });
+      }
+    </script>
+</body>
+</html>

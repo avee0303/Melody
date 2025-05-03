@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Careers - Burger 404</title>
+  <style>
+    body { background-color: antiquewhite; font-family: Arial, sans-serif; }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    nav {
+      width: 100%;
+      height: 70px;
+      background-color: blanchedalmond;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+      position: fixed;
+      z-index: 1000;
+    }
+
+    nav ul {
+      display: flex;
+      gap: 20px;
+      list-style: none;
+    }
+
+    nav ul li {
+      position: relative;
+    }
+
+    nav ul li a {
+      font-size: 20px;
+      font-family: 'Impact';
+      color: rgb(177, 143, 91);
+      text-decoration: none;
+      padding: 10px;
+      display: block;
+    }
+
+    nav ul li a:hover {
+      color: rgb(222, 73, 73);
+    }
+
+    nav ul li ul {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      background-color: blanchedalmond;
+      border-radius: 8px;
+      padding: 10px 0;
+      min-width: 180px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      z-index: 999;
+    }
+
+    nav ul li:hover > ul {
+      display: block;
+    }
+
+    nav ul li ul li {
+      width: 100%;
+    }
+
+    nav ul li ul li a {
+      font-size: 18px;
+      color: rgb(177, 143, 91);
+      text-decoration: none;
+      padding: 8px 20px;
+      display: block;
+      font-family: 'Impact';
+    }
+
+    nav ul li ul li a:hover {
+      color: rgb(222, 73, 73);
+      background-color: rgba(255, 235, 205, 0.4);
+    }
+
+    nav .logo {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    nav .logo img {
+      width: 220px;
+      padding-top: 25px;
+    }
+
+    .login {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      color: grey;
+      font-size: 16px;
+      font-weight: bold;
+      text-decoration: none;
+    }
+
+    .login:hover {
+      color: black;
+    }
+
+    .login img {
+      width: 24px;
+      height: 24px;
+    }
+
+    .career-header {
+      color: rgb(245, 235, 220);
+      background-color: rgb(80, 35, 20);
+      height: 230px;
+      font-size: 30px;
+      font-family: 'flame', "Cooper Black", "Helvetica Neue", Helvetica, Arial, sans-serif;
+      padding-top: 70px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .career-container {
+      max-width: 1000px;
+      margin: 40px auto;
+      padding: 20px;
+    }
+    h2 { font-size: 28px; color: #5c3317; margin-bottom: 15px; }
+    p { color: #7a5c40; font-size: 16px; margin-bottom: 10px; }
+    .job-card {
+      background-color: #fff6e8;
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+    }
+    .job-card h3 {
+      font-size: 22px;
+      color: #a33c00;
+    }
+    .apply-button {
+      display: inline-block;
+      margin-top: 10px;
+      background-color: #e67e00;
+      color: white;
+      padding: 10px 16px;
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    .apply-button:hover {
+      background-color: #cc6f00;
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <ul>
+      <li><a href="menu2.html">Menu</a></li>
+      <li><a href="offer2.html">Offers</a></li>
+      <li>
+        <a href="#">More</a>
+        <ul>
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="contact.html">Contact Us</a></li>
+          <li><a href="career.html">Career</a></li>
+        </ul>
+      </li>
+    </ul>
+    <a href="main2_page.php" class="logo"><img src="burger_404_transparent.png" alt="Logo"></a>
+    <a href="profile.php" class="login">
+      <img src="user.png" alt="login"><p>PROFILE</p>
+    </a>
+  </nav>
+
+  <header class="career-header"><h1>JOIN OUR TEAM</h1></header>
+
+  <div class="career-container">
+    <h2>We're hiring!</h2>
+    <p>Burger 4.0 is always looking for passionate individuals who want to make a difference – and burgers! Explore our open roles below and apply today.</p>
+
+    <div class="job-card">
+      <h3>🍔 Grill Cook</h3>
+      <p>We're looking for an experienced cook who can handle the heat and bring flavor to every patty.</p>
+      <a href="mailto:hr@burger404.com" class="apply-button">Apply Now</a>
+    </div>
+
+    <div class="job-card">
+      <h3>👨‍💼 Store Manager</h3>
+      <p>Lead a team of enthusiastic burger lovers and ensure top-notch service and quality every day.</p>
+      <a href="mailto:hr@burger404.com" class="apply-button">Apply Now</a>
+    </div>
+
+    <div class="job-card">
+      <h3>🎨 Marketing Intern</h3>
+      <p>Help spread the word about Burger 4.0 with creative campaigns, content, and social media ideas.</p>
+      <a href="mailto:hr@burger404.com" class="apply-button">Apply Now</a>
+    </div>
+  </div>
+
+</body>
+</html>

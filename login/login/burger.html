@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Menu - Burgers</title>
+  <link rel="stylesheet" href="menu2.css">
+  <style>
+    body {
+      background-color: antiquewhite;
+      font-family: Arial, sans-serif;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    nav {
+      width: 100%;
+      height: 70px;
+      background-color: blanchedalmond;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+      position: fixed;
+      z-index: 1000;
+    }
+
+    nav ul {
+      display: flex;
+      gap: 20px;
+      list-style: none;
+    }
+
+    nav ul li {
+      position: relative;
+    }
+
+    nav ul li a {
+      font-size: 20px;
+      font-family: 'Impact';
+      color: rgb(177, 143, 91);
+      text-decoration: none;
+    }
+
+    nav ul li a:hover {
+      color: rgb(222, 73, 73);
+    }
+
+    nav ul li ul {
+      display: none;
+      position: absolute;
+      top: 30px;
+      left: 0;
+      background-color: blanchedalmond;
+      padding: 10px;
+      border-radius: 8px;
+    }
+
+    nav ul li:hover ul {
+      display: block;
+    }
+
+    nav ul li ul li {
+      margin: 5px 0;
+    }
+
+    nav .logo {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    nav .logo img {
+      width: 220px;
+      padding-top: 25px;
+    }
+
+    .login {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      color: grey;
+      font-size: 16px;
+      font-weight: bold;
+      text-decoration: none;
+    }
+
+    .login:hover {
+      color: black;
+    }
+
+    .login img {
+      width: 24px;
+      height: 24px;
+    }
+
+    .burger-section {
+      padding-top: 50px;
+      text-align: center;
+      background-color: antiquewhite;
+    }
+    
+    .burger-title {
+      color: rgb(245, 235, 220);
+      background-color: rgb(80, 35, 20);
+      height: 230px;
+      font-size: 55px;
+      font-family: 'flame', "Cooper Black", "Helvetica Neue", Helvetica, Arial, sans-serif;
+      margin-top: 0px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      position: relative;
+    }
+
+    .categories {
+      margin: 30px auto 10px;
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      font-size: 18px;
+      font-weight: bold;
+    }
+
+    .categories a {
+      color: #663300;
+      text-decoration: none;
+      padding: 5px 10px;
+      border-radius: 5px;
+      transition: 0.3s;
+    }
+
+    .categories a:hover {
+      background-color: #e9cba7;
+      color: #cc0000;
+    }
+
+    .back-button {
+      margin: 15px 1200px 15px 0px; /* top, right, bottom, left */
+      display: inline-block;
+      padding: 10px 20px;
+      background-color: rgb(222, 73, 73);
+      color: white;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: bold;
+      transition: 0.3s;
+    }
+
+
+    .back-button:hover {
+      background-color: rgb(180, 50, 50);
+    }
+
+    .burger-items {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      flex-wrap: wrap;
+      margin-top: 30px;
+      padding-bottom: 60px;
+    }
+
+    .burger-card {
+      width: 260px;
+      background-color: #fff6e8;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      position: relative;
+    }
+
+    .burger-card img {
+      width: 100%;
+      height: auto;
+      border-radius: 8px;
+    }
+
+    .burger-name {
+      font-size: 20px;
+      font-weight: bold;
+      margin-top: 15px;
+      color: #5c3317;
+    }
+
+    .burger-desc {
+      font-size: 14px;
+      margin: 8px 0;
+      color: #7a5c40;
+    }
+
+    .burger-price {
+      font-size: 16px;
+      font-weight: bold;
+      color: #a33c00;
+    }
+
+    .add-cart {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      background-color: #ffcc66;
+      border: none;
+      border-radius: 50%;
+      font-size: 20px;
+      width: 30px;
+      height: 30px;
+      cursor: pointer;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+
+    .add-cart:hover {
+      background-color: #ffaa00;
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <ul>
+    <li><a href="menu2.html">Menu</a></li>
+    <li><a href="offer2.html">Offers</a></li>
+    <li><a href="#">More
+      <ul>
+        <li><a href="about.html">About Us</a></li>
+        <li><a href="contact.html">Contact Us</a></li>
+        <li><a href="career.html">Career</a></li>
+      </ul>
+    </a></li>
+  </ul>
+  <a href="main2_page.php" class="logo">
+    <img src="burger_404_transparent.png" alt="Logo">
+  </a>
+  <a href="profile.php" class="login">
+    <img src="user.png" alt="login">
+    <p>PROFILE</p>
+  </a>
+</nav>
+
+<section class="burger-section">
+  <h1 class="burger-title">BURGER</h1>
+
+  <div class="categories">
+    <a href="burger.html">Burger</a>
+    <a href="sides.html">Sides</a>
+    <a href="dessert.html">Dessert</a>
+    <a href="promotions.html">Promotion</a>
+    <a href="beverage.html">Beverage</a>
+    <a href="bundle.html">Bundle</a>
+  </div>
+
+  <a href="menu2.html" class="back-button">← Back to Menu</a>
+
+  <div class="burger-items">
+    <div class="burger-card">
+      <button class="add-cart">+</button>
+      <img src="Signature Angus.png" alt="Angus Signature Burger">
+      <div class="burger-name">Angus Signature Burger</div>
+      <div class="burger-desc">Juicy Angus beef, fresh lettuce, tomato & bacon.</div>
+      <div class="burger-price">RM 16.90</div>
+    </div>
+
+    <div class="burger-card">
+      <button class="add-cart">+</button>
+      <img src="Mushroom Angus.png" alt="Angus Mushroom Burger">
+      <div class="burger-name">Angus Mushroom Burger</div>
+      <div class="burger-desc">Angus beef topped with creamy mushroom sauce & cheese.</div>
+      <div class="burger-price">RM 17.50</div>
+    </div>
+  </div>
+</section>
+
+</body>
+</html>
