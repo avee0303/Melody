@@ -18,8 +18,8 @@ $last_name = trim($_POST['last_name'] ?? '');
 $email = trim($_POST['email'] ?? '');
 $password = trim($_POST['password'] ?? '');
 $phone = trim($_POST['phone'] ?? '');
-$gender = $_POST['gender'] ?? '';
-$dob = $_POST['dob'] ?? '';
+$dob = $_POST['dob'] ?? null;  // Made optional
+$address = trim($_POST['address'] ?? '');  // Added address field
 
 $errors = [];
 
@@ -31,8 +31,7 @@ if (!preg_match('/^[a-zA-Z\s\-]+$/', $last_name)) $errors[] = "Last name can onl
 if (!filter_var($email, FILTER_VALIDATE_EMAIL)) $errors[] = "Invalid email format.";
 if (strlen($password) < 6) $errors[] = "Password must be at least 6 characters.";
 if (!preg_match('/^(\+60|60|0)\d{8,10}$/', $phone)) $errors[] = "Phone must be 10-12 digits (e.g., 0123456789 or 60123456789).";
-if (empty($gender)) $errors[] = "Gender is required.";
-if (empty($dob)) $errors[] = "Date of birth is required.";
+if (empty($address)) $errors[] = "Address is required.";  // Address validation
 
 // If validation fails
 if (!empty($errors)) {
@@ -62,9 +61,8 @@ if ($result->num_rows > 0) {
 
 // Insert user
 $hashed_password = password_hash($password, PASSWORD_DEFAULT);
-$sql = "INSERT INTO users (first_name, last_name, email, password, phone, gender, dob) VALUES (?, ?, ?, ?, ?, ?, ?)";
-$stmt = $conn->prepare($sql);
-$stmt->bind_param("sssssss", $first_name, $last_name, $email, $hashed_password, $phone, $gender, $dob);
+$sql = "INSERT INTO users (first_name, last_name, email, password, phone, dob, address) VALUES (?, ?, ?, ?, ?, ?, ?)";$stmt = $conn->prepare($sql);
+$stmt->bind_param("sssssss", $first_name, $last_name, $email, $hashed_password, $phone, $dob, $address);
 
 if ($stmt->execute()) {
     $_SESSION['success_message'] = "Registration successful! Please log in.";

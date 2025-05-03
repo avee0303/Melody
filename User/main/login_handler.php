@@ -40,14 +40,13 @@ if ($result->num_rows === 1) {
         $_SESSION['last_name'] = $user['last_name'];
         $_SESSION['email'] = $user['email'];
         $_SESSION['phone'] = $user['phone'];
-        $_SESSION['gender'] = $user['gender'];
         $_SESSION['dob'] = $user['dob'];
+        $_SESSION['address'] = $user['address'];  // Added address
         $_SESSION['logged_in'] = true;
 
         $stmt->close();
         $conn->close();
         header("Location: ../login/main2_page.php");
-
         exit();
     } else {
         $_SESSION['error_message'] = "Incorrect password.";
