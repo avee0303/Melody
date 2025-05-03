@@ -297,7 +297,7 @@ nav ul li ul li a:hover {
 <body>
 <nav>
       <ul>
-        <li><a href="menu2.html">Menu</a></li>
+        <li><a href="menu2.php">Menu</a></li>
         <li><a href="offer2.html">Offers</a></li>
         <li><a href="#">More</a>
           <ul>
