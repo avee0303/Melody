@@ -19,7 +19,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         } else {
             // login success
             $_SESSION['admin_id'] = $user['id'];
-            header("Location: admin_dashboard.php");
+            header("Location: new_admin_dashboard.php");
             exit();
         }
     } else {

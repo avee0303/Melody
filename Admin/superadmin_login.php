@@ -21,7 +21,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $_SESSION['superadmin_email'] = $user['email'];
         $_SESSION['superadmin_name'] = $user['name'];
 
-        echo "<script>window.location.href = 'superadmin_dashboard.php';</script>";
+        header("Location: new_superadmin_dashboard.php");
         exit();
 
     } else {

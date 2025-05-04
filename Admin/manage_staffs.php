@@ -107,7 +107,7 @@ $staffQuery = $conn->query("SELECT * FROM admin");
         <?php endwhile; ?>
     </table>
 
-    <a href="superadmin_dashboard.php" class="logout-link">Back to Dashboard</a>
+    <a href="new_superadmin_dashboard.php" class="logout-link">Back to Dashboard</a>
 
     <script src="js/scripts.js" defer></script>
 </body>

@@ -4,7 +4,7 @@ include("config/db_connect.php");
 
 // Check if superadmin is logged in
 if (!isset($_SESSION['superadmin_id'])) {
-    header("Location: superadmin_login.php");
+    header("Location: new_superadmin_dashboard.php");
     exit();
 }
 
@@ -49,6 +49,6 @@ $result = $conn->query($sql);
     </table>
 </body>
 
-<a href="superadmin_dashboard.php" class="logout-link">Back to Dashboard</a>
+<a href="new_superadmin_dashboard.php" class="logout-link">Back to Dashboard</a>
 
 </html>
