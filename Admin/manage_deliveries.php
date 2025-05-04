@@ -3,11 +3,7 @@ session_start();
 include("config/db_connect.php");
 
 // Fetch Deliveries
-$deliveryQuery = $conn->query("
-    SELECT d.*, o.customer_name, o.product_name 
-    FROM deliveries d 
-    JOIN orders o ON d.order_id = o.id
-");
+$deliveryQuery = $conn->query("SELECT * FROM deliveries");
 ?>
 
 <!DOCTYPE html>
@@ -50,6 +46,8 @@ $deliveryQuery = $conn->query("
         </tr>
         <?php endwhile; ?>
     </table>
+
+    <a href="admin_dashboard.php" class="logout-link">Back to Dashboard</a>
 
     <script src="js/scripts.js" defer></script>
 </body>

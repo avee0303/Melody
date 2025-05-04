@@ -2,6 +2,10 @@
 session_start();
 include("config/db_connect.php");
 
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $_POST['email'];
     $password = $_POST['password'];
@@ -13,13 +17,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $user = $result->fetch_assoc();
 
     if ($user && password_verify($password, $user['password'])) {
-        // Login success
         $_SESSION['superadmin_id'] = $user['id'];
         $_SESSION['superadmin_email'] = $user['email'];
         $_SESSION['superadmin_name'] = $user['name'];
-        
-        header("Location: superadmin_dashboard.php");
+
+        echo "<script>window.location.href = 'superadmin_dashboard.php';</script>";
         exit();
+
     } else {
         $error = "Invalid email or password.";
     }

@@ -1,6 +1,6 @@
 <?php
 session_start();
-if (!isset($_SESSION['admin_id'])) {
+if (!isset($_SESSION['superadmin_id'])) {
     header("Location: superadmin_login.php");
     exit();
 }

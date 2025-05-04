@@ -98,11 +98,11 @@ $customerQuery = $conn->query("SELECT * FROM customer");
     <h3>Customer List</h3>
     <table border="1">
         <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Phone</th>
-            <th>Address</th>
+            <th>Customer ID</th>
+            <th>Customer Name</th>
+            <th>Customer Email</th>
+            <th>Customer Phone</th>
+            <th>Customer Address</th>
             <th>Actions</th>
         </tr>
         <?php while ($customer = $customerQuery->fetch_assoc()): ?>
@@ -119,6 +119,8 @@ $customerQuery = $conn->query("SELECT * FROM customer");
         </tr>
         <?php endwhile; ?>
     </table>
+
+    <a href="admin_dashboard.php" class="logout-link">Back to Dashboard</a>
 
     <script src="js/scripts.js" defer></script>
 </body>

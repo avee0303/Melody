@@ -18,7 +18,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $error = "Your account is inactive. Please contact admin.";
         } else {
             // login success
-            $_SESSION['user_id'] = $user['id'];
+            $_SESSION['admin_id'] = $user['id'];
             header("Location: admin_dashboard.php");
             exit();
         }

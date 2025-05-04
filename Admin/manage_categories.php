@@ -49,6 +49,8 @@ $categoryQuery = $conn->query("SELECT * FROM categories");
         <?php endwhile; ?>
     </table>
 
+    <a href="admin_dashboard.php" class="logout-link">Back to Dashboard</a>
+
     <script src="js/scripts.js" defer></script>
 </body>
 </html>

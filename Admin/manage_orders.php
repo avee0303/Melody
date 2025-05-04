@@ -3,7 +3,7 @@ session_start();
 include("config/db_connect.php");
 
 // Fetch Orders
-$orderQuery = $conn->query("SELECT * FROM orders");
+$orderQuery = $conn->query("SELECT * FROM `order`");
 ?>
 
 <!DOCTYPE html>
@@ -46,6 +46,8 @@ $orderQuery = $conn->query("SELECT * FROM orders");
         </tr>
         <?php endwhile; ?>
     </table>
+
+    <a href="admin_dashboard.php" class="logout-link">Back to Dashboard</a>
 
     <script src="js/scripts.js" defer></script>
 </body>

@@ -1,8 +1,8 @@
 <?php
 $servername = "localhost";
-$username = "root";  // Change if using another username
-$password = "";  // Change if using a password
-$dbname = "burger_king_admin";
+$username = "root";
+$password = "";
+$dbname = "database"; // change this
 
 $conn = new mysqli($servername, $username, $password, $dbname);
 

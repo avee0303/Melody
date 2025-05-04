@@ -24,11 +24,11 @@ $result = $conn->query($sql);
     <table border="1">
         <thead>
             <tr>
-                <th>Email</th>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Phone</th>
-                <th>Address</th>
+                <th>Customer Email</th>
+                <th>Customer ID</th>
+                <th>Customer Name</th>
+                <th>Customer Phone</th>
+                <th>Customer Address</th>
                 <th>Status</th>
             </tr>
         </thead>
@@ -46,4 +46,7 @@ $result = $conn->query($sql);
         </tbody>
     </table>
 </body>
+
+<a href="superadmin_dashboard.php" class="logout-link">Back to Dashboard</a>
+
 </html>

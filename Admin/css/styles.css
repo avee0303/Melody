@@ -108,3 +108,41 @@ th {
     .form-vertical button:hover {
         background-color:rgb(196, 144, 1);
     }
+
+    .button-container {
+        margin-top: 30px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 15px;
+    }
+
+    .admin-button {
+        background-color: #ff6600;
+        border: none;
+        color: white;
+        padding: 15px 25px;
+        text-align: center;
+        text-decoration: none;
+        font-size: 16px;
+        border-radius: 8px;
+        transition: background-color 0.3s ease;
+        cursor: pointer;
+    }
+
+    .admin-button:hover {
+        background-color: #e65c00;
+    }
+
+    .logout-link {
+        display: inline-block;
+        margin-top: 40px;
+        color: #fff;
+        background-color: #cc0000;
+        padding: 10px 20px;
+        text-decoration: none;
+        border-radius: 6px;
+    }
+
+    .logout-link:hover {
+        background-color: #a80000;
+    }

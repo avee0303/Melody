@@ -38,4 +38,7 @@ $result = $conn->query($sql);
         </tbody>
     </table>
 </body>
+
+<a href="superadmin_dashboard.php" class="logout-link">Back to Dashboard</a>
+
 </html>

@@ -50,6 +50,7 @@ $staffQuery = $conn->query("SELECT * FROM admin");
     <title>Manage Staff</title>
     <link rel="stylesheet" href="css/styles.css">
 </head>
+
 <body>
     <h2>Manage Staffs</h2>
 
@@ -83,10 +84,10 @@ $staffQuery = $conn->query("SELECT * FROM admin");
     <h3>Staff List</h3>
     <table border="1">
         <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Phone</th>
+            <th>Staff ID</th>
+            <th>Staff Name</th>
+            <th>Staff Email</th>
+            <th>Staff Phone</th>
             <th>Status</th>
             <th>Actions</th>
         </tr>
@@ -105,6 +106,8 @@ $staffQuery = $conn->query("SELECT * FROM admin");
         </tr>
         <?php endwhile; ?>
     </table>
+
+    <a href="superadmin_dashboard.php" class="logout-link">Back to Dashboard</a>
 
     <script src="js/scripts.js" defer></script>
 </body>
