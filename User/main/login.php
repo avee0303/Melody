@@ -329,7 +329,7 @@ unset($_SESSION['success_message'], $_SESSION['error_message']);
             <span>Use your email and password</span>
             <input type="email" name="email" placeholder="Email" required>
             <input type="password" name="password" placeholder="Password" required>
-            <a href="forgot_password.php" class="forgot-password">Forget Your Password?</a>
+            <a href="recoverpsw.php" class="forgot-password">Forget Your Password?</a>
             <button type="submit">Sign In</button>
         </form>
     </div>
