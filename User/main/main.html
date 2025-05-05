@@ -304,11 +304,37 @@ nav ul li ul li a:hover {
         <img src="burger_404_transparent.png" alt="Logo">
     </a>
 
-    <a href="login.php" class="login">
-      <img src="user.png" alt="login">
-      <p>Login / Register</p>
-    </a>
-
+    <nav>
+        <ul>
+            <li><a href="menu.html">Menu</a></li>
+            <li><a href="offer.html">Offers</a></li>
+            <li><a href="#">More</a>
+                <ul>
+                    <li><a href="about.html">About Us</a></li>
+                    <li><a href="contact.html">Contact Us</a></li>
+                    <li><a href="career.html">Career</a></li>
+                </ul>
+            </li>
+        </ul>
+        <a href="main.html" class="logo">
+            <img src="burger_404_transparent.png" alt="Logo">
+        </a>
+    
+        <div style="display: flex; align-items: center; gap: 10px; margin-right: 10px;">
+            <a href="login.php" class="login">
+                <img src="user.png" alt="login">
+                <p>Login / Register</p>
+            </a>
+            <a href="/admin/admin_login.php" class="login">
+                <img src="admin.png" alt="login">
+                <p>Admin login</p>
+            </a>
+            <a href="/admin/superadmin_login.php" class="login">
+                <img src="superadmin.png" alt="login">
+                <p>Superadmin login</p>
+            </a>
+        </div>
+    </nav>
   </nav>
 
     <section class="container">
@@ -323,8 +349,7 @@ nav ul li ul li a:hover {
           <a data-slide="1"></a>
           <a data-slide="2"></a>
         </div>
-        
-        
+
       </div>
     </section>
     
