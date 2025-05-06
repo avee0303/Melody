@@ -2,12 +2,6 @@
 session_start();
 include("config/db_connect.php");
 
-// Check if superadmin is logged in
-if (!isset($_SESSION['superadmin_id'])) {
-    header("Location:new_superadmin_dashboard.php");
-    exit();
-}
-
 // Fetch customers
 $sql = "SELECT * FROM product";
 $result = $conn->query($sql);
@@ -18,9 +12,33 @@ $result = $conn->query($sql);
 <head>
     <title>View Products</title>
     <link rel="stylesheet" href="css/styles.css">
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 80%;
+            margin: 20px auto;
+        }
+
+        th, td {
+            padding: 12px;
+            border: 1px solid #ccc;
+            text-align: center;
+        }
+
+        img {
+            width: 80px;
+            height: auto;
+        }
+
+        .logout-link {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+        }
+    </style>
 </head>
 <body>
-    <h2>Product List</h2>
+    <h2 style="text-align:center;">Product List</h2>
     <table border="1">
         <thead>
             <tr>

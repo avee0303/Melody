@@ -7,9 +7,24 @@ if (isset($_GET['id'])) {
 
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $name = $_POST['name'];
+        $imageName = $category['image']; // Keep current image by default
 
-        $stmt = $conn->prepare("UPDATE categories SET name=? WHERE id=?");
-        $stmt->bind_param("si", $name, $id);
+        // If new image uploaded
+        if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
+            $imageTmpPath = $_FILES['image']['tmp_name'];
+            $imageName = basename($_FILES['image']['name']);
+            $uploadDir = 'uploads/';
+            $targetFilePath = $uploadDir . $imageName;
+
+            if (!is_dir($uploadDir)) {
+                mkdir($uploadDir, 0755, true);
+            }
+
+            move_uploaded_file($imageTmpPath, $targetFilePath);
+        }
+
+        $stmt = $conn->prepare("UPDATE categories SET name=?, image=? WHERE id=?");
+        $stmt->bind_param("ssi", $name, $imageName, $id);
 
         if ($stmt->execute()) {
             header("Location: manage_categories.php?success=Category updated successfully");
@@ -73,10 +88,21 @@ if (isset($_GET['id'])) {
 
     <?php if (isset($error)) echo "<p class='error'>$error</p>"; ?>
 
-    <form method="POST" class="form-vertical">
+    <form method="POST" class="form-vertical" enctype="multipart/form-data">
     <div>
-        <label for="name">Category Name</label><br>
-        <input type="text" id="name" name="name" value="<?= $category['name'] ?>" required>
+        <label for="name">Category Name</label>
+        <input type="text" id="name" name="name" value="<?= htmlspecialchars($category['name']) ?>" required>
+    </div>
+
+    <div>
+        <label for="image">Category Image</label>
+        <?php if (!empty($category['image'])): ?>
+            <div>
+                <img src="uploads/<?= htmlspecialchars($category['image']) ?>" alt="Category Image" style="max-width: 150px; display:block; margin-bottom:10px;">
+            </div>
+        <?php endif; ?>
+        <input type="file" id="image" name="image" accept="image/*">
+        <small>Leave empty to keep existing image</small>
     </div>
 
     <div>

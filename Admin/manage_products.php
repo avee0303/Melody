@@ -13,6 +13,30 @@ $productQuery = $conn->query("SELECT * FROM product");
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Manage Products</title>
     <link rel="stylesheet" href="css/styles.css">
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 80%;
+            margin: 20px auto;
+        }
+
+        th, td {
+            padding: 12px;
+            border: 1px solid #ccc;
+            text-align: center;
+        }
+
+        img {
+            width: 80px;
+            height: auto;
+        }
+
+        .logout-link {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+        }
+    </style>
 </head>
 <body>
     <h2>Manage Products</h2>
@@ -29,7 +53,7 @@ $productQuery = $conn->query("SELECT * FROM product");
 
     <a href="add_product.php">Add New Product</a>
 
-    <h3>Product List</h3>
+    <h3  style="text-align:center;">Product List</h3>
     <table border="1">
         <tr>
             <th>Product ID</th>
@@ -58,7 +82,7 @@ $productQuery = $conn->query("SELECT * FROM product");
         <?php endwhile; ?>
     </table>
 
-    <a href="admin_dashboard.php" class="logout-link">Back to Dashboard</a>
+    <a href="new_admin_dashboard.php" class="logout-link">Back to Dashboard</a>
 
     <script src="js/scripts.js" defer></script>
 </body>

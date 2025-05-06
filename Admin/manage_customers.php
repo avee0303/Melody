@@ -57,6 +57,30 @@ $customerQuery = $conn->query("SELECT * FROM customer");
     <title>Manage Customers</title>
 
     <link rel="stylesheet" href="css/styles.css">
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 80%;
+            margin: 20px auto;
+        }
+
+        th, td {
+            padding: 12px;
+            border: 1px solid #ccc;
+            text-align: center;
+        }
+
+        img {
+            width: 80px;
+            height: auto;
+        }
+
+        .logout-link {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+        }
+    </style>
 </head>
 <body>
     <h2>Manage Customers</h2>
@@ -95,7 +119,7 @@ $customerQuery = $conn->query("SELECT * FROM customer");
     <button type="submit" name="add_customer">Add</button>
     </form>
 
-    <h3>Customer List</h3>
+    <h3  style="text-align:center;">Customer List</h3>
     <table border="1">
         <tr>
             <th>Customer ID</th>
@@ -120,7 +144,7 @@ $customerQuery = $conn->query("SELECT * FROM customer");
         <?php endwhile; ?>
     </table>
 
-    <a href="admin_dashboard.php" class="logout-link">Back to Dashboard</a>
+    <a href="new_admin_dashboard.php" class="logout-link">Back to Dashboard</a>
 
     <script src="js/scripts.js" defer></script>
 </body>

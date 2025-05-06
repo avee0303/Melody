@@ -49,6 +49,30 @@ $staffQuery = $conn->query("SELECT * FROM admin");
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Manage Staff</title>
     <link rel="stylesheet" href="css/styles.css">
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 80%;
+            margin: 20px auto;
+        }
+
+        th, td {
+            padding: 12px;
+            border: 1px solid #ccc;
+            text-align: center;
+        }
+
+        img {
+            width: 80px;
+            height: auto;
+        }
+
+        .logout-link {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+        }
+    </style>
 </head>
 
 <body>
@@ -81,7 +105,7 @@ $staffQuery = $conn->query("SELECT * FROM admin");
         <button type="submit" name="add_staff">Add</button>
     </form>
 
-    <h3>Staff List</h3>
+    <h3  style="text-align:center;">Staff List</h3>
     <table border="1">
         <tr>
             <th>Staff ID</th>

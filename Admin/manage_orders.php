@@ -14,13 +14,37 @@ $orderQuery = $conn->query("SELECT * FROM `order`");
     <title>Manage Orders</title>
 
     <link rel="stylesheet" href="css/styles.css">
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 80%;
+            margin: 20px auto;
+        }
+
+        th, td {
+            padding: 12px;
+            border: 1px solid #ccc;
+            text-align: center;
+        }
+
+        img {
+            width: 80px;
+            height: auto;
+        }
+
+        .logout-link {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+        }
+    </style>
 </head>
 <body>
     <h2>Manage Orders</h2>
 
     <?php if (isset($_GET['success'])) echo "<p class='success'>{$_GET['success']}</p>"; ?>
 
-    <h3>Order List</h3>
+    <h3  style="text-align:center;">Order List</h3>
     <table border="1">
         <tr>
             <th>ID</th>
@@ -47,7 +71,7 @@ $orderQuery = $conn->query("SELECT * FROM `order`");
         <?php endwhile; ?>
     </table>
 
-    <a href="admin_dashboard.php" class="logout-link">Back to Dashboard</a>
+    <a href="new_admin_dashboard.php" class="logout-link">Back to Dashboard</a>
 
     <script src="js/scripts.js" defer></script>
 </body>

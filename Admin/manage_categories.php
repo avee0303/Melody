@@ -14,6 +14,30 @@ $categoryQuery = $conn->query("SELECT * FROM categories");
     <title>Manage Categories</title>
 
     <link rel="stylesheet" href="css/styles.css">
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 80%;
+            margin: 20px auto;
+        }
+
+        th, td {
+            padding: 12px;
+            border: 1px solid #ccc;
+            text-align: center;
+        }
+
+        img {
+            width: 80px;
+            height: auto;
+        }
+
+        .logout-link {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+        }
+    </style>
 </head>
 <body>
     <h2>Manage Categories</h2>
@@ -30,17 +54,26 @@ $categoryQuery = $conn->query("SELECT * FROM categories");
 
     <a href="add_category.php">Add New Category</a>
 
-    <h3>Category List</h3>
+    <h3  style="text-align:center;">Category List</h3>
     <table border="1">
-        <tr>
-            <th>ID</th>
-            <th>Category Name</th>
-            <th>Actions</th>
-        </tr>
+    <tr>
+        <th>ID</th>
+        <th>Category Name</th>
+        <th>Image</th>
+        <th>Actions</th>
+    </tr>
+
         <?php while ($category = $categoryQuery->fetch_assoc()): ?>
         <tr>
             <td><?= $category['id'] ?></td>
             <td><?= $category['name'] ?></td>
+            <td>
+                <?php if (!empty($category['image'])): ?>
+                    <img src="uploads/<?= htmlspecialchars($category['image']) ?>" width="50" alt="Category Image">
+                <?php else: ?>
+                    <span>No image</span>
+                <?php endif; ?>
+            </td>
             <td>
                 <a href="edit_category.php?id=<?= $category['id'] ?>">Edit</a>
                 <a href="delete_category.php?id=<?= $category['id'] ?>">Delete</a>
@@ -49,7 +82,7 @@ $categoryQuery = $conn->query("SELECT * FROM categories");
         <?php endwhile; ?>
     </table>
 
-    <a href="admin_dashboard.php" class="logout-link">Back to Dashboard</a>
+    <a href="new_admin_dashboard.php" class="logout-link">Back to Dashboard</a>
 
     <script src="js/scripts.js" defer></script>
 </body>

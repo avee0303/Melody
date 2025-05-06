@@ -3,7 +3,10 @@ include("config/db_connect.php");
 
 if (isset($_GET['id'])) {
     $id = $_GET['id'];
-    $product = $conn->query("SELECT * FROM product WHERE id = $id")->fetch_assoc();
+    $stmt = $conn->prepare("SELECT * FROM product WHERE id = ?");
+    $stmt->bind_param("i", $id);
+    $stmt->execute();
+    $product = $stmt->get_result()->fetch_assoc();
     $categories = $conn->query("SELECT * FROM categories");
 
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -11,11 +14,20 @@ if (isset($_GET['id'])) {
         $description = $_POST['description'];
         $price = $_POST['price'];
         $category = $_POST['category'];
-        $image = $product['image']; // Default to current image
+        $imageName = $product['image']; // Keep current image by default
 
-        // Price validation (ensure price is greater than 0)
-        if ($price <= 0) {
-            $error = "Price must be greater than 0.";
+        // If new image uploaded
+        if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
+            $imageTmpPath = $_FILES['image']['tmp_name'];
+            $imageName = basename($_FILES['image']['name']);
+            $uploadDir = 'uploads/';
+            $targetFilePath = $uploadDir . $imageName;
+
+            if (!is_dir($uploadDir)) {
+                mkdir($uploadDir, 0755, true);
+            }
+
+            move_uploaded_file($imageTmpPath, $targetFilePath);
         }
 
         // Image update logic
