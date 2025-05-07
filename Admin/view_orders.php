@@ -3,7 +3,7 @@ session_start();
 include("config/db_connect.php");
 
 // Fetch order
-$sql = "SELECT * FROM `order`";
+$sql = "SELECT * FROM orders";
 $result = $conn->query($sql);
 ?>
 
