@@ -3,7 +3,7 @@ session_start();
 include("config/db_connect.php");
 
 // Fetch Orders
-$orderQuery = $conn->query("SELECT * FROM `order`");
+$orderQuery = $conn->query("SELECT * FROM orders");
 ?>
 
 <!DOCTYPE html>
@@ -57,15 +57,15 @@ $orderQuery = $conn->query("SELECT * FROM `order`");
         </tr>
         <?php while ($order = $orderQuery->fetch_assoc()): ?>
         <tr>
-            <td><?= $order['id'] ?></td>
-            <td><?= $order['customer_name'] ?></td>
-            <td><?= $order['product_name'] ?></td>
-            <td><?= $order['quantity'] ?></td>
-            <td>$<?= number_format($order['total_price'], 2) ?></td>
-            <td><?= $order['status'] ?></td>
+            <td><?= $orders['id'] ?></td>
+            <td><?= $orders['customer_name'] ?></td>
+            <td><?= $orders['product_name'] ?></td>
+            <td><?= $orders['quantity'] ?></td>
+            <td>$<?= number_format($orders['total_price'], 2) ?></td>
+            <td><?= $orders['status'] ?></td>
             <td>
-                <a href="edit_order.php?id=<?= $order['id'] ?>">Update Status</a>
-                <a href="delete_order.php?id=<?= $order['id'] ?>" onclick="return confirm('Are you sure?')">Delete</a>
+                <a href="edit_order.php?id=<?= $orders['id'] ?>">Update Status</a>
+                <a href="delete_order.php?id=<?= $orders['id'] ?>" onclick="return confirm('Are you sure?')">Delete</a>
             </td>
         </tr>
         <?php endwhile; ?>
