@@ -3,7 +3,7 @@
 $host = 'localhost';
 $user = 'root';
 $password = '';
-$dbname = 'database';
+$dbname = 'burger4.0';
 
 $conn = new mysqli($host, $user, $password, $dbname);
 if ($conn->connect_error) {
@@ -11,18 +11,18 @@ if ($conn->connect_error) {
 }
 
 function getTotal($conn, $table) {
-    $sql = "SELECT COUNT(*) AS total FROM `$table`";
+    $sql = "SELECT COUNT(*) AS total FROM $table";
     $result = $conn->query($sql);
     $row = $result->fetch_assoc();
     return $row['total'];
 }
 
 $staffTotal = getTotal($conn, 'admin');
-$orderTotal = getTotal($conn, 'order');
+$orderTotal = getTotal($conn, 'orders');
 $customerTotal = getTotal($conn, 'customer');
 $deliveryTotal = getTotal($conn, 'deliveries');
 $categoryTotal = getTotal($conn, 'categories');
-$productTotal = getTotal($conn, 'product');
+$productTotal = getTotal($conn, 'products');
 
 $conn->close();
 ?>
