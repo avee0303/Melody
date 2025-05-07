@@ -3,7 +3,7 @@ include("config/db_connect.php");
 
 if (isset($_GET['id'])) {
     $id = $_GET['id'];
-    $stmt = $conn->prepare("SELECT * FROM product WHERE id = ?");
+    $stmt = $conn->prepare("SELECT * FROM products WHERE id = ?");
     $stmt->bind_param("i", $id);
     $stmt->execute();
     $product = $stmt->get_result()->fetch_assoc();
@@ -50,7 +50,7 @@ if (isset($_GET['id'])) {
         }
 
         if (!isset($error)) {
-            $stmt = $conn->prepare("UPDATE product SET name=?, description=?, price=?, category=?, image=? WHERE id=?");
+            $stmt = $conn->prepare("UPDATE products SET name=?, description=?, price=?, category=?, image=? WHERE id=?");
             $stmt->bind_param("ssdssi", $name, $description, $price, $category, $image, $id);
 
             if ($stmt->execute()) {
@@ -156,7 +156,7 @@ if (isset($_GET['id'])) {
         <div>
             <label for="image">Image</label>
             <input type="file" id="image" name="image">
-            <img src="<?= htmlspecialchars($product['image']) ?>" alt="Current Image">
+            <img src="<?= htmlspecialchars($product['image_path']) ?>" alt="Current Image">
         </div>
 
         <div>
