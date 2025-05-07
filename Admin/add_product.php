@@ -7,10 +7,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $name = $_POST['name'];
     $description = $_POST['description'];
     $price = $_POST['price'];
-    $category = $_POST['category'];
+    $category_name = $_POST['category'];
     $image = '';
 
-    // Price validation (ensure price is positive and greater than 0)
+    // Price validation
     if ($price <= 0) {
         $error = "Price must be greater than 0.";
     }
@@ -18,7 +18,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Image upload logic
     if (!empty($_FILES["image"]["name"]) && !isset($error)) {
         $target_dir = "uploads/";
-        $image_name = basename($_FILES["image"]["name"]);
+        $image_name = uniqid() . '_' . basename($_FILES["image"]["name"]);
         $image_path = $target_dir . $image_name;
         $allowed_types = ['jpg', 'jpeg', 'png', 'gif'];
         $file_type = strtolower(pathinfo($image_name, PATHINFO_EXTENSION));
@@ -28,21 +28,34 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         } elseif ($_FILES["image"]["size"] > 2 * 1024 * 1024) {
             $error = "File too large. Max 2MB allowed.";
         } elseif (!move_uploaded_file($_FILES["image"]["tmp_name"], $image_path)) {
-            $error = "Image upload failed.";
+            $error = "Image upload failed. Please check directory permissions.";
         } else {
             $image = $image_path;
         }
     }
 
     if (!isset($error)) {
-        $stmt = $conn->prepare("INSERT INTO product (name, description, price, category, image) VALUES (?, ?, ?, ?, ?)");
-        $stmt->bind_param("ssdss", $name, $description, $price, $category, $image);
+        // Get category ID from name
+        $category_stmt = $conn->prepare("SELECT id FROM categories WHERE name = ?");
+        $category_stmt->bind_param("s", $category_name);
+        $category_stmt->execute();
+        $category_result = $category_stmt->get_result();
+        
+        if ($category_result->num_rows > 0) {
+            $category_data = $category_result->fetch_assoc();
+            $categories_id = $category_data['id'];
 
-        if ($stmt->execute()) {
-            header("Location: manage_products.php?success=Product added successfully");
-            exit();
+            $stmt = $conn->prepare("INSERT INTO products (name, description, price, category, image) VALUES (?, ?, ?, ?, ?)");
+            $stmt->bind_param("ssdss", $name, $description, $price, $category, $image);
+
+            if ($stmt->execute()) {
+                header("Location: manage_products.php?success=Product added successfully");
+                exit();
+            } else {
+                $error = "Error adding product: " . $conn->error;
+            }
         } else {
-            $error = "Error adding product.";
+            $error = "Selected category not found.";
         }
     }
 }
@@ -71,15 +84,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             font-weight: bold;
         }
 
-        .form-vertical input, .form-vertical select {
+        .form-vertical input, 
+        .form-vertical select,
+        .form-vertical textarea {
             width: 100%;
             padding: 10px;
             box-sizing: border-box;
-        }
-
-        .form-vertical img {
-            margin-top: 5px;
-            width: 80px;
         }
 
         .form-vertical button {
@@ -89,6 +99,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             border: none;
             cursor: pointer;
             border-radius: 4px;
+            font-size: 16px;
         }
 
         .form-vertical button:hover {
@@ -98,6 +109,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         .error {
             color: red;
             text-align: center;
+            padding: 10px;
+            background-color: #ffeeee;
+            border-radius: 4px;
+            margin-bottom: 20px;
         }
     </style>
 </head>
@@ -114,12 +129,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         <div>
             <label for="description">Description</label>
-            <input type="text" id="description" name="description" required>
+            <textarea id="description" name="description" rows="3" required></textarea>
         </div>
 
         <div>
-            <label for="price">Price</label>
-            <input type="number" step="0.01" id="price" name="price" required>
+            <label for="price">Price (RM)</label>
+            <input type="number" step="0.01" id="price" name="price" min="0.01" required>
         </div>
 
         <div>
@@ -127,21 +142,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <select id="category" name="category" required>
                 <option value="">Select Category</option>
                 <?php while ($cat = $categories->fetch_assoc()): ?>
-                    <option value="<?= $cat['name'] ?>"><?= htmlspecialchars($cat['name']) ?></option>
+                    <option value="<?= htmlspecialchars($cat['name']) ?>">
+                        <?= htmlspecialchars($cat['name']) ?>
+                    </option>
                 <?php endwhile; ?>
             </select>
         </div>
 
         <div>
-            <label for="image">Image</label>
-            <input type="file" id="image" name="image">
+            <label for="image">Product Image</label>
+            <input type="file" id="image" name="image" accept="image/*">
+            <small>Maximum 2MB (JPG, PNG, GIF)</small>
         </div>
 
         <div>
             <button type="submit">Add Product</button>
         </div>
     </form>
-
-    <script src="js/scripts.js" defer></script>
 </body>
 </html>
