@@ -1,51 +1,59 @@
 <?php
-session_start();
-$conn = new mysqli("localhost", "root", "", "database");
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
+    $userId = $_POST['users_id'];
+    $cartId = $_POST['cart_id'];
+    $name = $_POST['name'];
+    $address = $_POST['address'];
+    $postcode = $_POST['postcode'];
+    $paymentMethod = $_POST['paymentMethod'];
+    $tip = $_POST['tip'];
+    $deliveryCharge = $_POST['deliveryCharge'];
+    $totalAmount = $_POST['totalAmount'];
+    $checkoutLat = $_POST['checkoutLat'];
+    $checkoutLng = $_POST['checkoutLng'];
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Ensure all required POST variables are set
-    if (isset($_POST['customer_id'], $_POST['cart_id'], $_POST['name'], $_POST['address'], $_POST['postcode'], $_POST['paymentMethod'], $_POST['tip'], $_POST['deliveryCharge'], $_POST['totalAmount'], $_POST['checkoutLat'], $_POST['checkoutLng'])) {
-        // Get POST data
-        $customer_id = $_POST['customer_id'];
-        $cart_id = $_POST['cart_id'];
-        $name = $_POST['name'];
-        $address = $_POST['address'];
-        $postcode = $_POST['postcode'];
-        $paymentMethod = $_POST['paymentMethod'];
-        $tip = $_POST['tip'];
-        $deliveryCharge = $_POST['deliveryCharge'];
-        $totalAmount = $_POST['totalAmount'];
-        $checkoutLat = $_POST['checkoutLat'];
-        $checkoutLng = $_POST['checkoutLng'];
+    $servername = "localhost"; 
+    $username = "root";        
+    $password = "";           
+    $dbname = "payment"; 
 
-        // Insert query without checkout_date (MySQL will handle it automatically)
-        $sql = "INSERT INTO checkout (customer_id, cart_id, name, address, postcode, payment_method, tip, delivery_charge, total_amount, checkout_lat, checkout_lng)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-        // Prepare and bind parameters
-        $stmt = $conn->prepare($sql);
-        $stmt->bind_param("iissssddddd", $customer_id, $cart_id, $name, $address, $postcode, $paymentMethod, $tip, $deliveryCharge, $totalAmount, $checkoutLat, $checkoutLng);
+    $conn = new mysqli($servername, $username, $password, $dbname);
 
-        
-        // Execute and check if successful
-        if ($stmt->execute()) {
-            echo "Address and order saved successfully!";
-        } else {
-            echo "Error: " . $stmt->error;
-        }
 
-        $stmt->close();
-    } else {
-        echo "Error: Missing required fields.";
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
+    }
+    $stmt = $conn->prepare("INSERT INTO orders (user_id, cart_id, name, address, postcode, payment_method, tip, delivery_charge, total_amount, checkout_lat, checkout_lng)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+
+$stmt->bind_param(
+"iisssssddss",  // types: int, int, string, string, string, string, string, double, double, string, string
+$userId,
+$cartId,
+$name,
+$address,
+$postcode,
+$paymentMethod,
+$tip,
+$deliveryCharge,
+$totalAmount,
+$checkoutLat,
+$checkoutLng
+);
+
+    
+    if (!$stmt->execute()) {
+        echo "Error: " . $stmt->error;
     }
 
+    $stmt->close();
     $conn->close();
 }
 ?>
+
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -55,12 +63,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <title>Checkout</title>
     <link rel="stylesheet" href="styles.css">
     <style>   
-          body {
+        body {
             font-family: 'Arial', sans-serif;
             background-color: #f5e1c8;
             margin: 0;
             padding: 0;
         }
+
+        .main-box {
+            background-color: #f0e6d2; 
+            padding: 40px 20px;
+            margin: 20px auto;
+            max-width: 1000px;
+            border-radius: 15px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
         .navbar {   
             background: #d62300;
             padding: 15px;
@@ -69,6 +87,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             font-size: 20px;
             font-weight: bold;
         }
+
         .container {
             width: 80%;
             margin: 50px auto;
@@ -78,22 +97,27 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
             border: 5px solid #d62300;
         }
+
         h2 {
             color: #8b5e3b;
             text-align: center;
         }
+
         .section {
             margin-bottom: 20px;
         }
+
         .section h3 {
             margin-bottom: 10px;
             color: #6a4d32;
         }
+
         .address-box, #addressForm, .order-summary {
             background: #e6d3b5;
             padding: 10px;
             border-radius: 5px;
         }
+
         .btn {
             background: #8b5e3b;
             color: #fff;
@@ -104,6 +128,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             cursor: pointer;
             font-weight: bold;
         }
+
         .submit-btn {
             width: 100%;
             font-size: 18px;
@@ -111,6 +136,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             color: #fff;
             padding: 15px;
         }
+
         select, input[type="text"] {
             width: 100%;
             padding: 10px;
@@ -118,13 +144,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             border: 1px solid #8b5e3b;
             border-radius: 5px;
         }
+
         .tip-buttons button {
             background: #b08a65;
             margin-right: 5px;
         }
+
         hr {
             border: 1px solid #8b5e3b;
         }
+
         .footer {
             text-align: center;
             padding: 15px;
@@ -135,86 +164,112 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </style>
 </head>
 <body>
-    <div class="checkout-container">
-        <h2>Checkout</h2>
-        
-        <div class="section">
-            <h3>Delivery Address</h3>
-            <div class="address-box">
-                <p><strong id="displayAddress">5 Jalan Bukit Indah 17</strong></p>
-                <p id="displayPostcode">Johor, 85020</p>
-                <button onclick="openAddressForm()">Change</button>
-            </div>
-            <div id="addressForm" style="display: none;">
-                <input type="text" id="newAddress" placeholder="Enter new address">
-                <input type="text" id="newPostcode" placeholder="Enter new postcode">
-                <button onclick="saveAddress()">Save</button>
-                <button onclick="closeAddressForm()">Cancel</button>
-            </div>
-        </div>
-       
-        <div>
-            <h3>Order Time</h3>
-            <p> Date: <span id="visibleDate"></span></p>
-            <p>Time: <span id="visibleTime"></span></p>
-        </div>
+    <div class="main-box">
+        <div class="checkout-container">
+            <h2>Checkout</h2>
 
-        <div class="section">
-            <h3>Delivery Options</h3>
-            <label><input type="radio" name="delivery" value="-1.40" onclick="updateDelivery(this)"> Economy (20-35 min) - RM 1.40 off</label><br>
-            <label><input type="radio" name="delivery" value="0" checked onclick="updateDelivery(this)"> Standard (9-25 min)</label><br>
-            <label><input type="radio" name="delivery" value="2.40" onclick="updateDelivery(this)"> Priority (5-20 min) + RM 2.40</label>
-        </div>
-
-        <h3>Payment Method</h3>
-
-<label>
-    <input type="radio" name="paymentMethod" value="credit-card" onchange="togglePaymentDetails()">
-    Credit Card
-</label><br>
-
-<label>
-    <input type="radio" name="paymentMethod" value="TNG ewallet" onchange="togglePaymentDetails()">
-    TNG eWallet
-</label><br>
-
-<label>
-    <input type="radio" name="paymentMethod" value="cash" onchange="togglePaymentDetails()">
-    Cash
-</label><br>
-
-
-<div id="paymentDetails"></div>
-
-
-        <div class="section">
-            <h3>Promo Code</h3>
-            <input type="text" id="promoCode" name="promoCode" placeholder="Enter Promo Code">
-            <button type="button" onclick="applyPromo()">Apply</button>
-            <p id="discountInfo" style="color: green;"></p>
-        </div>
-            
-        <div class="section">
             <div class="section">
-                <h3>Tip Your Rider (Optional)</h3>
-                <div class="tip-buttons">
-                    <button onclick="addTip(1.00)">RM 1.00</button>
-                    <button onclick="addTip(2.00)">RM 2.00</button>
-                    <button onclick="addTip(3.00)">RM 3.00</button>
-                    <button onclick="addTip(4.00)">RM 4.00</button>
+                <h3>Delivery Address</h3>
+                <div class="address-box">
+                    <p><strong id="displayAddress">5 Jalan Bukit Indah 17</strong></p>
+                    <p id="displayPostcode">Johor, 85020</p>
+                    <button onclick="openAddressForm()">Change</button>
+                </div>
+                <div id="addressForm" style="display: none;">
+                    <input type="text" id="newAddress" placeholder="Enter new address">
+                    <input type="text" id="newPostcode" placeholder="Enter new postcode">
+                    <button onclick="saveAddress()">Save</button>
+                    <button onclick="closeAddressForm()">Cancel</button>
                 </div>
             </div>
-        </div>
 
-        <div class="section">
-            <h3>Order Summary</h3>
-            <div id="orderSummary"></div>
-            <hr>
-            <p><strong>Total: RM <span id="totalAmount">0.00</span></strong></p>
-        </div>
+            <div>
+                <h3>Order Time</h3>
+                <p>Date: <span id="visibleDate"></span></p>
+                <p>Time: <span id="visibleTime"></span></p>
+            </div>
 
-        <button class="submit-btn" onclick="placeOrder()">Place Order</button>
+            <div class="section">
+                <h3>Delivery Options</h3>
+                <label><input type="radio" name="delivery" value="-1.40" onclick="updateDelivery(this)"> Economy (20-35 min) - RM 1.40 off</label><br>
+                <label><input type="radio" name="delivery" value="0" checked onclick="updateDelivery(this)"> Standard (9-25 min)</label><br>
+                <label><input type="radio" name="delivery" value="2.40" onclick="updateDelivery(this)"> Priority (5-20 min) + RM 2.40</label>
+            </div>
+
+            <h3>Payment Method</h3>
+            <label>
+                <input type="radio" name="paymentMethod" value="credit-card" onchange="togglePaymentDetails()">
+                Credit Card
+            </label><br>
+
+            <label>
+                <input type="radio" name="paymentMethod" value="TNG ewallet" onchange="togglePaymentDetails()">
+                TNG eWallet
+            </label><br>
+
+            <label>
+                <input type="radio" name="paymentMethod" value="cash" onchange="togglePaymentDetails()">
+                Cash
+            </label><br>
+
+            <div id="paymentDetails"></div>
+
+            <div class="section">
+                <h3>Promo Code</h3>
+                <input type="text" id="promoCode" name="promoCode" placeholder="Enter Promo Code">
+                <button type="button" onclick="applyPromo()">Apply</button>
+                <p id="discountInfo" style="color: green;"></p>
+            </div>
+
+            <div class="section">
+                <div class="section">
+                    <h3>Tip Your Rider (Optional)</h3>
+                    <div class="tip-buttons">
+                        <button onclick="addTip(1.00)">RM 1.00</button>
+                        <button onclick="addTip(2.00)">RM 2.00</button>
+                        <button onclick="addTip(3.00)">RM 3.00</button>
+                        <button onclick="addTip(4.00)">RM 4.00</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h3>Order Summary</h3>
+                <div id="orderSummary"></div>
+                <hr>
+                <p><strong>Total: RM <span id="totalAmount">0.00</span></strong></p>
+            </div>
+
+        
+
+        </div>
     </div>
+    <form id="checkoutForm" method="POST" onsubmit="placeOrder(event)">
+  <div class="main-box">
+    <div class="checkout-container">
+      
+      <button class="submit-btn" type="submit">Place Order</button>
+    </div>
+  </div>
+  <input type="hidden" name="users_id" value="1">
+  <input type="hidden" name="cart_id" value="123">
+  <input type="hidden" name="name" id="formName">
+  <input type="hidden" name="address" id="formAddress">
+  <input type="hidden" name="postcode" id="formPostcode">
+  <input type="hidden" name="paymentMethod" id="formPayment">
+  <input type="hidden" name="tip" id="formTip">
+  <input type="hidden" name="deliveryCharge" id="formDelivery">
+  <input type="hidden" name="totalAmount" id="formTotal">
+  <input type="hidden" name="checkoutLat" id="formLat" value="0">
+  <input type="hidden" name="checkoutLng" id="formLng" value="0">
+  <input type="hidden" name="date" id="checkoutDate">
+  <input type="hidden" name="time" id="checkoutTime">
+
+</form>
+
+
+</body>
+</html>
 
     <script>
     let orders = [];
@@ -270,35 +325,34 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         "SAVE5": 5.00        
     };
 
-    function updateOrderSummary(subtotal) {
-        let packagingFee = 2.00;
-        let serviceTax = 0.24;
-        let total = subtotal + tipAmount + deliveryCharge - discount + packagingFee + serviceTax;
-        let orderSummaryDiv = document.getElementById('orderSummary');
+function updateOrderSummary(subtotal) {
+    let packagingFee = 2.00;
+    let serviceTax = 0.24;
+    let total = subtotal + tipAmount + deliveryCharge - discount + packagingFee + serviceTax;
+    let orderSummaryDiv = document.getElementById('orderSummary');
 
-        
-        orderSummaryDiv.innerHTML = "";
+    orderSummaryDiv.innerHTML = "";
 
-        
-        orders.forEach(item => {
-            let itemTotal = item.price * (item.quantity || 1);
-            orderSummaryDiv.innerHTML += `<p>${item.name} (x${item.quantity || 1}) - RM ${itemTotal.toFixed(2)}</p>`;
-        });
+    orders.forEach(item => {
+        let itemTotal = item.price * (item.quantity || 1);
+        orderSummaryDiv.innerHTML += `<p>${item.name} (x${item.quantity || 1}) - RM ${itemTotal.toFixed(2)}</p>`;
+    });
 
-        orderSummaryDiv.innerHTML += `<p>Packaging Fee - RM ${packagingFee.toFixed(2)}</p>`;
-        orderSummaryDiv.innerHTML += `<p>Service Tax - RM ${serviceTax.toFixed(2)}</p>`;
-        orderSummaryDiv.innerHTML += `<p>Delivery - RM ${deliveryCharge.toFixed(2)}</p>`;
+    orderSummaryDiv.innerHTML += `<p>Packaging Fee - RM ${packagingFee.toFixed(2)}</p>`;
+    orderSummaryDiv.innerHTML += `<p>Service Tax - RM ${serviceTax.toFixed(2)}</p>`;
+    orderSummaryDiv.innerHTML += `<p>Delivery - RM ${deliveryCharge.toFixed(2)}</p>`;
 
-        if (tipAmount > 0) {
-            orderSummaryDiv.innerHTML += `<p>Tip - RM ${tipAmount.toFixed(2)}</p>`;
-        }
-
-        if (discount > 0) {
-            orderSummaryDiv.innerHTML += `<p style="color:green;">Promo Discount - RM ${discount.toFixed(2)}</p>`;
-        }
-
-        document.getElementById('totalAmount').innerText = total.toFixed(2);
+    if (tipAmount > 0) {
+        orderSummaryDiv.innerHTML += `<p>Tip - RM ${tipAmount.toFixed(2)}</p>`;
     }
+
+    if (discount > 0) {
+        orderSummaryDiv.innerHTML += `<p style="color:green;">Promo Discount - RM ${discount.toFixed(2)}</p>`;
+    }
+
+    document.getElementById('totalAmount').innerText = total.toFixed(2);
+}
+
 
     function applyPromo() {
     let promoCode = document.getElementById("promoCode").value.trim().toUpperCase();
@@ -326,10 +380,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     function addTip(amount) {
-        tipAmount = (tipAmount === amount) ? 0 : amount;
-        let subtotal = orders.reduce((sum, item) => sum + item.price * (item.quantity || 1), 0);
-        updateOrderSummary(subtotal);
-    }
+    tipAmount = (tipAmount === amount) ? 0 : amount; 
+    let subtotal = orders.reduce((sum, item) => sum + item.price * (item.quantity || 1), 0);
+    updateOrderSummary(subtotal);
+
+    document.getElementById("formTip").value = tipAmount.toFixed(2);
+}
+
 
     function togglePaymentDetails() {
     let selected = document.querySelector('input[name="paymentMethod"]:checked');
@@ -352,10 +409,10 @@ expDateInput.addEventListener('input', function(e) {
         value = value.slice(0, 2) + '/' + value.slice(2, 4);
     }
 
-    value = value.slice(0, 5); // MM/YY max length
+    value = value.slice(0, 5); 
     e.target.value = value;
 
-    // Check if year > 28 (means after 2028)
+ 
     if (value.length === 5) {
         const [monthStr, yearStr] = value.split('/');
         const year = parseInt(yearStr);
@@ -363,7 +420,7 @@ expDateInput.addEventListener('input', function(e) {
 
         if (year > 28) {
             alert("Expiration year cannot be after 2028.");
-            e.target.value = ''; // clear input
+            e.target.value = ''; 
         } else if (year === 28 && month > 12) {
             alert("Invalid month in 2028.");
             e.target.value = '';
@@ -385,6 +442,7 @@ expDateInput.addEventListener('input', function(e) {
     } else {
         details.innerHTML = '';
     }
+   
 }
 
 
@@ -414,14 +472,65 @@ expDateInput.addEventListener('input', function(e) {
 
         document.getElementById('displayAddress').innerText = newAddress;
         document.getElementById('displayPostcode').innerText = newPostcode;
+
+        document.getElementById("formAddress").value = newAddress;
+        document.getElementById("formPostcode").value = newPostcode;
+
         closeAddressForm();
     }
 
-    function placeOrder() {
-        alert("Your order has been placed successfully!");
+    
+    function placeOrder(event) {
+    event.preventDefault(); 
+
+    const selectedPayment = document.querySelector('input[name="paymentMethod"]:checked');
+    const paymentMethod = selectedPayment ? selectedPayment.value : "cash";
+
+    // If credit card is selected, validate card details
+    if (paymentMethod === "credit-card") {
+        const cardNumber = document.getElementById("cardNumber").value.trim();
+        const expDate = document.getElementById("expDate").value.trim();
+        const cvv = document.querySelector('input[name="cvv"]').value.trim();
+
+        if (!cardNumber || !expDate || !cvv) {
+            alert("⚠️ Please complete all credit card information before placing the order.");
+            return;
+        }
+
+        // Optional: basic format checks
+        if (cardNumber.replace(/\s/g, '').length < 16) {
+            alert("⚠️ Card number must be at least 16 digits.");
+            return;
+        }
+
+        if (!/^(0[1-9]|1[0-2])\/\d{2}$/.test(expDate)) {
+            alert("⚠️ Expiration date format is invalid.");
+            return;
+        }
+
+        if (!/^\d{3}$/.test(cvv)) {
+            alert("⚠️ CVV must be 3 digits.");
+            return;
+        }
     }
 
 
-    updateOrderSummary();
+    document.getElementById("formName").value = "User Name";
+    document.getElementById("formAddress").value = document.getElementById("displayAddress").innerText;
+    document.getElementById("formPostcode").value = document.getElementById("displayPostcode").innerText;
+    document.getElementById("formPayment").value = paymentMethod;
+    document.getElementById("formTip").value = tipAmount.toFixed(2);
+    document.getElementById("formDelivery").value = deliveryCharge.toFixed(2);
+    document.getElementById("formTotal").value = document.getElementById("totalAmount").innerText;
+
+
+    alert("✅ Order successfully placed!");
+
+    document.getElementById("checkoutForm").submit();
+}
+
+
+
     </script>
 </body>
+</html>

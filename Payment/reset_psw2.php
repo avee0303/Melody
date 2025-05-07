@@ -247,36 +247,46 @@ input[type="password"] {
 
 </body>
 </html>
-
 <?php
-    if(isset($_POST["reset"])){
-        $conn = mysqli_connect("localhost", "root", "", "database");
-        $psw = $_POST["password"];
 
+
+if (isset($_POST["reset"])) {
+    $conn = mysqli_connect("localhost", "root", "", "database");
+    $psw = $_POST["password"];
+
+    // Check if session values are available
+    if (isset($_SESSION['token']) && isset($_SESSION['email'])) {
         $token = $_SESSION['token'];
         $Email = $_SESSION['email'];
 
-        $hash = password_hash( $psw , PASSWORD_DEFAULT );
+        $hash = password_hash($psw, PASSWORD_DEFAULT);
 
         $sql = mysqli_query($conn, "SELECT * FROM users WHERE email='$Email'");
         $query = mysqli_num_rows($sql);
-        $fetch = mysqli_fetch_assoc($sql);
 
-        if($Email){
-            $new_pass = $hash;
-            mysqli_query($conn, "UPDATE users SET password='$new_pass' WHERE email='$Email'");
+        if ($query > 0) {
+            mysqli_query($conn, "UPDATE users SET password='$hash' WHERE email='$Email'");
             ?>
             <script>
+                alert("Your password has been successfully reset");
                 window.location.replace("login2.php");
-                alert("<?php echo "Your password has been successfully reset"; ?>");
             </script>
             <?php
         } else {
             ?>
             <script>
-                alert("<?php echo "Please try again"; ?>");
+                alert("Email not found in database");
             </script>
             <?php
         }
+    } else {
+        // Session values not found
+        ?>
+        <script>
+            alert("Session expired or invalid. Please try resetting your password again.");
+            window.location.replace("recover_psw2.php"); // or whatever page starts the reset
+        </script>
+        <?php
     }
+}
 ?>

@@ -46,7 +46,9 @@ if ($result->num_rows === 1) {
 
         $stmt->close();
         $conn->close();
+        
         header("Location: ../login/main2_page.php");
+
         exit();
     } else {
         $_SESSION['error_message'] = "Incorrect password.";

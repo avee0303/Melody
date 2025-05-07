@@ -1,4 +1,5 @@
 
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,13 +8,23 @@
     <title>Checkout</title>
     <link rel="stylesheet" href="styles.css">
     <style>   
-          body {
+        body {
             font-family: 'Arial', sans-serif;
             background-color: #f5e1c8;
             margin: 0;
             padding: 0;
         }
-        .navbar {
+
+        .main-box {
+            background-color: #f0e6d2; 
+            padding: 40px 20px;
+            margin: 20px auto;
+            max-width: 1000px;
+            border-radius: 15px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar {   
             background: #d62300;
             padding: 15px;
             text-align: center;
@@ -21,6 +32,7 @@
             font-size: 20px;
             font-weight: bold;
         }
+
         .container {
             width: 80%;
             margin: 50px auto;
@@ -30,22 +42,27 @@
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
             border: 5px solid #d62300;
         }
+
         h2 {
             color: #8b5e3b;
             text-align: center;
         }
+
         .section {
             margin-bottom: 20px;
         }
+
         .section h3 {
             margin-bottom: 10px;
             color: #6a4d32;
         }
+
         .address-box, #addressForm, .order-summary {
             background: #e6d3b5;
             padding: 10px;
             border-radius: 5px;
         }
+
         .btn {
             background: #8b5e3b;
             color: #fff;
@@ -56,6 +73,7 @@
             cursor: pointer;
             font-weight: bold;
         }
+
         .submit-btn {
             width: 100%;
             font-size: 18px;
@@ -63,6 +81,7 @@
             color: #fff;
             padding: 15px;
         }
+
         select, input[type="text"] {
             width: 100%;
             padding: 10px;
@@ -70,13 +89,16 @@
             border: 1px solid #8b5e3b;
             border-radius: 5px;
         }
+
         .tip-buttons button {
             background: #b08a65;
             margin-right: 5px;
         }
+
         hr {
             border: 1px solid #8b5e3b;
         }
+
         .footer {
             text-align: center;
             padding: 15px;
@@ -87,76 +109,112 @@
     </style>
 </head>
 <body>
-    <div class="checkout-container">
-        <h2>Checkout</h2>
-        
-        <div class="section">
-            <h3>Delivery Address</h3>
-            <div class="address-box">
-                <p><strong id="displayAddress">5 Jalan Bukit Indah 17</strong></p>
-                <p id="displayPostcode">Johor, 85020</p>
-                <button onclick="openAddressForm()">Change</button>
-            </div>
-            <div id="addressForm" style="display: none;">
-                <input type="text" id="newAddress" placeholder="Enter new address">
-                <input type="text" id="newPostcode" placeholder="Enter new postcode">
-                <button onclick="saveAddress()">Save</button>
-                <button onclick="closeAddressForm()">Cancel</button>
-            </div>
-        </div>
-       
-        <div>
-            <h3>Order Time</h3>
-            <p> Date: <span id="visibleDate"></span></p>
-            <p>Time: <span id="visibleTime"></span></p>
-        </div>
+    <div class="main-box">
+        <div class="checkout-container">
+            <h2>Checkout</h2>
 
-        <div class="section">
-            <h3>Delivery Options</h3>
-            <label><input type="radio" name="delivery" value="-1.40" onclick="updateDelivery(this)"> Economy (20-35 min) - RM 1.40 off</label><br>
-            <label><input type="radio" name="delivery" value="0" checked onclick="updateDelivery(this)"> Standard (10-25 min)</label><br>
-            <label><input type="radio" name="delivery" value="2.40" onclick="updateDelivery(this)"> Priority (5-20 min) + RM 2.40</label>
-        </div>
-
-        <div class="section">
-            <h3>Payment Method</h3>
-            <select id="paymentMethod" onchange="togglePaymentDetails()">
-                <option value="tng">Touch 'n Go eWallet</option>
-                <option value="credit-card">Credit/Debit Card</option>
-                <option value="bank">Online Banking</option>
-                <option value="cash">Cash on Delivery</option>
-            </select>
-            <div id="paymentDetails"></div>
-        </div>
-
-        <div class="section">
-            <h3>Promo Code</h3>
-            <input type="text" id="promoCode" name="promoCode" placeholder="Enter Promo Code">
-            <button type="button" onclick="applyPromo()">Apply</button>
-            <p id="discountInfo" style="color: green;"></p>
-        </div>
-            
-        <div class="section">
             <div class="section">
-                <h3>Tip Your Rider (Optional)</h3>
-                <div class="tip-buttons">
-                    <button onclick="addTip(1.00)">RM 1.00</button>
-                    <button onclick="addTip(2.00)">RM 2.00</button>
-                    <button onclick="addTip(3.00)">RM 3.00</button>
-                    <button onclick="addTip(4.00)">RM 4.00</button>
+                <h3>Delivery Address</h3>
+                <div class="address-box">
+                    <p><strong id="displayAddress">5 Jalan Bukit Indah 17</strong></p>
+                    <p id="displayPostcode">Johor, 85020</p>
+                    <button onclick="openAddressForm()">Change</button>
+                </div>
+                <div id="addressForm" style="display: none;">
+                    <input type="text" id="newAddress" placeholder="Enter new address">
+                    <input type="text" id="newPostcode" placeholder="Enter new postcode">
+                    <button onclick="saveAddress()">Save</button>
+                    <button onclick="closeAddressForm()">Cancel</button>
                 </div>
             </div>
-        </div>
 
-        <div class="section">
-            <h3>Order Summary</h3>
-            <div id="orderSummary"></div>
-            <hr>
-            <p><strong>Total: RM <span id="totalAmount">0.00</span></strong></p>
-        </div>
+            <div>
+                <h3>Order Time</h3>
+                <p>Date: <span id="visibleDate"></span></p>
+                <p>Time: <span id="visibleTime"></span></p>
+            </div>
 
-        <button class="submit-btn" onclick="placeOrder()">Place Order</button>
+            <div class="section">
+                <h3>Delivery Options</h3>
+                <label><input type="radio" name="delivery" value="-1.40" onclick="updateDelivery(this)"> Economy (20-35 min) - RM 1.40 off</label><br>
+                <label><input type="radio" name="delivery" value="0" checked onclick="updateDelivery(this)"> Standard (9-25 min)</label><br>
+                <label><input type="radio" name="delivery" value="2.40" onclick="updateDelivery(this)"> Priority (5-20 min) + RM 2.40</label>
+            </div>
+
+            <h3>Payment Method</h3>
+            <label>
+                <input type="radio" name="paymentMethod" value="credit-card" onchange="togglePaymentDetails()">
+                Credit Card
+            </label><br>
+
+            <label>
+                <input type="radio" name="paymentMethod" value="TNG ewallet" onchange="togglePaymentDetails()">
+                TNG eWallet
+            </label><br>
+
+            <label>
+                <input type="radio" name="paymentMethod" value="cash" onchange="togglePaymentDetails()">
+                Cash
+            </label><br>
+
+            <div id="paymentDetails"></div>
+
+            <div class="section">
+                <h3>Promo Code</h3>
+                <input type="text" id="promoCode" name="promoCode" placeholder="Enter Promo Code">
+                <button type="button" onclick="applyPromo()">Apply</button>
+                <p id="discountInfo" style="color: green;"></p>
+            </div>
+
+            <div class="section">
+                <div class="section">
+                    <h3>Tip Your Rider (Optional)</h3>
+                    <div class="tip-buttons">
+                        <button onclick="addTip(1.00)">RM 1.00</button>
+                        <button onclick="addTip(2.00)">RM 2.00</button>
+                        <button onclick="addTip(3.00)">RM 3.00</button>
+                        <button onclick="addTip(4.00)">RM 4.00</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h3>Order Summary</h3>
+                <div id="orderSummary"></div>
+                <hr>
+                <p><strong>Total: RM <span id="totalAmount">0.00</span></strong></p>
+            </div>
+
+        
+
+        </div>
     </div>
+    <form id="checkoutForm" method="POST" onsubmit="placeOrder(event)">
+  <div class="main-box">
+    <div class="checkout-container">
+      
+      <button class="submit-btn" type="submit">Place Order</button>
+    </div>
+  </div>
+
+  <form onsubmit="return validatePaymentDetails()" method="POST">
+
+  <input type="hidden" name="users_id" value="1">
+  <input type="hidden" name="cart_id" value="123">
+  <input type="hidden" name="name" id="formName">
+  <input type="hidden" name="address" id="formAddress">
+  <input type="hidden" name="postcode" id="formPostcode">
+  <input type="hidden" name="paymentMethod" id="formPayment">
+  <input type="hidden" name="tip" id="formTip">
+  <input type="hidden" name="deliveryCharge" id="formDelivery">
+  <input type="hidden" name="totalAmount" id="formTotal">
+  <input type="hidden" name="checkoutLat" id="formLat" value="0">
+  <input type="hidden" name="checkoutLng" id="formLng" value="0">
+</form>
+
+
+</body>
+</html>
 
     <script>
     let orders = [];
@@ -164,27 +222,25 @@
     let tipAmount = 0;
     let discount = 0;
 
-    // Unified window.onload function
     window.onload = function () {
-        loadCartItems(); // Load cart items
+        loadCartItems(); 
         const now = new Date();
 
-        // Get current date in YYYY-MM-DD format
         const date = now.toISOString().split('T')[0]; 
 
-        // Get current time in HH:MM:SS format
+        
         const time = now.toTimeString().split(' ')[0];
 
-        // Check if the elements exist before trying to display the date and time
+        
         const dateElement = document.getElementById("visibleDate");
         const timeElement = document.getElementById("visibleTime");
 
         if (dateElement && timeElement) {
-            // Display date and time on the page
+            
             dateElement.textContent = date;
             timeElement.textContent = time;
 
-            // Optionally store the date and time in hidden inputs (if required for form submission)
+            
             document.getElementById("checkoutDate").value = date;
             document.getElementById("checkoutTime").value = time;
         } else {
@@ -205,61 +261,62 @@
         });
 
         orders = [...storedCartItems];
-        updateOrderSummary(subtotal); // Pass the subtotal for further calculation
+        updateOrderSummary(subtotal); 
     }
 
+  
     const promoCodes = {
-        "DISCOUNT10": 10.00, // Direct discount of 10 RM
-        "SAVE5": 5.00        // Direct discount of 5 RM
+        "DISCOUNT10": 10.00, 
+        "SAVE5": 5.00        
     };
 
-    function updateOrderSummary(subtotal) {
-        let packagingFee = 2.00;
-        let serviceTax = 0.24;
-        let total = subtotal + tipAmount + deliveryCharge - discount + packagingFee + serviceTax;
-        let orderSummaryDiv = document.getElementById('orderSummary');
+function updateOrderSummary(subtotal) {
+    let packagingFee = 2.00;
+    let serviceTax = 0.24;
+    let total = subtotal + tipAmount + deliveryCharge - discount + packagingFee + serviceTax;
+    let orderSummaryDiv = document.getElementById('orderSummary');
 
-        // Clear previous order summary to prevent duplication
-        orderSummaryDiv.innerHTML = "";
+    orderSummaryDiv.innerHTML = "";
 
-        // Re-add items to the order summary
-        orders.forEach(item => {
-            let itemTotal = item.price * (item.quantity || 1);
-            orderSummaryDiv.innerHTML += `<p>${item.name} (x${item.quantity || 1}) - RM ${itemTotal.toFixed(2)}</p>`;
-        });
+    orders.forEach(item => {
+        let itemTotal = item.price * (item.quantity || 1);
+        orderSummaryDiv.innerHTML += `<p>${item.name} (x${item.quantity || 1}) - RM ${itemTotal.toFixed(2)}</p>`;
+    });
 
-        orderSummaryDiv.innerHTML += `<p>Packaging Fee - RM ${packagingFee.toFixed(2)}</p>`;
-        orderSummaryDiv.innerHTML += `<p>Service Tax - RM ${serviceTax.toFixed(2)}</p>`;
-        orderSummaryDiv.innerHTML += `<p>Delivery - RM ${deliveryCharge.toFixed(2)}</p>`;
+    orderSummaryDiv.innerHTML += `<p>Packaging Fee - RM ${packagingFee.toFixed(2)}</p>`;
+    orderSummaryDiv.innerHTML += `<p>Service Tax - RM ${serviceTax.toFixed(2)}</p>`;
+    orderSummaryDiv.innerHTML += `<p>Delivery - RM ${deliveryCharge.toFixed(2)}</p>`;
 
-        if (tipAmount > 0) {
-            orderSummaryDiv.innerHTML += `<p>Tip - RM ${tipAmount.toFixed(2)}</p>`;
-        }
-
-        if (discount > 0) {
-            orderSummaryDiv.innerHTML += `<p style="color:green;">Promo Discount - RM ${discount.toFixed(2)}</p>`;
-        }
-
-        document.getElementById('totalAmount').innerText = total.toFixed(2);
+    if (tipAmount > 0) {
+        orderSummaryDiv.innerHTML += `<p>Tip - RM ${tipAmount.toFixed(2)}</p>`;
     }
+
+    if (discount > 0) {
+        orderSummaryDiv.innerHTML += `<p style="color:green;">Promo Discount - RM ${discount.toFixed(2)}</p>`;
+    }
+
+    document.getElementById('totalAmount').innerText = total.toFixed(2);
+}
+
+
     function applyPromo() {
-        let promoCode = document.getElementById("promoCode").value.trim().toUpperCase();
-    
-        if (promoCodes.hasOwnProperty(promoCode)) {
-            discount = promoCodes[promoCode];
-            document.getElementById("discountInfo").innerText = `Promo Applied: ${promoCode} (-RM ${discount.toFixed(2)})`;
-            document.getElementById("discountInfo").style.color = "green";
-        } else {
-            discount = 0;
-            document.getElementById("discountInfo").innerText = "❌ Invalid or expired promo code!";
-            document.getElementById("discountInfo").style.color = "red";
-        }
-    
-        // Calculate current subtotal before calling updateOrderSummary
-        let subtotal = orders.reduce((sum, item) => sum + item.price * (item.quantity || 1), 0);
-        updateOrderSummary(subtotal);
+    let promoCode = document.getElementById("promoCode").value.trim().toUpperCase();
+
+    if (promoCodes.hasOwnProperty(promoCode)) {
+        discount = promoCodes[promoCode];
+        document.getElementById("discountInfo").innerText = `Promo Applied: ${promoCode} (-RM ${discount.toFixed(2)})`;
+        document.getElementById("discountInfo").style.color = "green";
+    } else {
+        discount = 0;
+        document.getElementById("discountInfo").innerText = "❌ Invalid or expired promo code!";
+        document.getElementById("discountInfo").style.color = "red";
     }
+
     
+    let subtotal = orders.reduce((sum, item) => sum + item.price * (item.quantity || 1), 0);
+    updateOrderSummary(subtotal);
+}
+
 
     function updateDelivery(option) {
         deliveryCharge = 3.99 + parseFloat(option.value);
@@ -268,16 +325,112 @@
     }
 
     function addTip(amount) {
-        tipAmount = (tipAmount === amount) ? 0 : amount;
-        let subtotal = orders.reduce((sum, item) => sum + item.price * (item.quantity || 1), 0);
-        updateOrderSummary(subtotal);
-    }
+    tipAmount = (tipAmount === amount) ? 0 : amount; 
+    let subtotal = orders.reduce((sum, item) => sum + item.price * (item.quantity || 1), 0);
+    updateOrderSummary(subtotal);
+
+    document.getElementById("formTip").value = tipAmount.toFixed(2);
+}
+
 
     function togglePaymentDetails() {
-        let method = document.getElementById('paymentMethod').value;
-        let details = document.getElementById('paymentDetails');
-        details.innerHTML = method === "credit-card" ? '<input type="text" placeholder="Card Number">' : '';
+    let selected = document.querySelector('input[name="paymentMethod"]:checked');
+    let details = document.getElementById('paymentDetails');
+
+    if (selected && selected.value === "credit-card") {
+        details.innerHTML = `
+            <input type="text" id="cardNumber" placeholder="Card Number" name="cardNumber" maxlength="19" required><br>
+            <input type="text" id="expDate" placeholder="Expiration Date (MM/YY)" name="expDate"
+                pattern="^(0[1-9]|1[0-2])\\/\\d{2}$" maxlength="5" title="Format must be MM/YY" required><br>
+            <input type="text" placeholder="Security Code (CVV)" name="cvv"
+                pattern="\\d{3}" maxlength="3" inputmode="numeric" title="Must be 3 digits" required>
+        `;
+
+        const expDateInput = document.getElementById('expDate');
+expDateInput.addEventListener('input', function(e) {
+    let value = e.target.value.replace(/[^0-9]/g, '');
+
+    if (value.length >= 2) {
+        value = value.slice(0, 2) + '/' + value.slice(2, 4);
     }
+
+    value = value.slice(0, 5); 
+    e.target.value = value;
+
+ 
+    if (value.length === 5) {
+        const [monthStr, yearStr] = value.split('/');
+        const year = parseInt(yearStr);
+        const month = parseInt(monthStr);
+
+        if (year > 28) {
+            alert("Expiration year cannot be after 2028.");
+            e.target.value = ''; 
+        } else if (year === 28 && month > 12) {
+            alert("Invalid month in 2028.");
+            e.target.value = '';
+        }
+    }
+});
+
+        const cardNumberInput = document.getElementById('cardNumber');
+        cardNumberInput.addEventListener('input', function(e) {
+            let value = e.target.value.replace(/[^0-9]/g, '');
+            let formattedValue = '';
+
+            for (let i = 0; i < value.length; i += 4) {
+                formattedValue += value.slice(i, i + 4) + ' ';
+            }
+
+            e.target.value = formattedValue.trim().slice(0, 19); 
+        });
+    } else {
+        details.innerHTML = '';
+    }
+   
+}
+
+function validatePaymentDetails() {
+    let selected = document.querySelector('input[name="paymentMethod"]:checked');
+    
+    if (selected && selected.value === "credit-card") {
+        let cardNumber = document.getElementById('cardNumber');
+        let expDate = document.getElementById('expDate');
+        let cvv = document.querySelector('input[name="cvv"]');
+
+        if (!cardNumber || !expDate || !cvv) {
+            alert("Please fill in all credit card details.");
+            return false;
+        }
+
+        if (cardNumber.value.trim().replace(/ /g, '').length < 16) {
+            alert("Card number must be 16 digits.");
+            return false;
+        }
+
+        const expPattern = /^(0[1-9]|1[0-2])\/\d{2}$/;
+        if (!expPattern.test(expDate.value)) {
+            alert("Expiration date must be in MM/YY format.");
+            return false;
+        }
+
+        const [monthStr, yearStr] = expDate.value.split('/');
+        const year = parseInt(yearStr);
+        const month = parseInt(monthStr);
+        if (year > 28 || (year === 28 && month > 12)) {
+            alert("Expiration year cannot be after 2028.");
+            return false;
+        }
+
+        if (!/^\d{3}$/.test(cvv.value)) {
+            alert("CVV must be 3 digits.");
+            return false;
+        }
+    }
+
+    return true; // allow form to submit
+}
+
 
     function openAddressForm() {
         document.getElementById('addressForm').style.display = 'block';
@@ -307,11 +460,28 @@
         closeAddressForm();
     }
 
-    function placeOrder() {
-        alert("Your order has been placed successfully!");
-    }
+    
+    function placeOrder(event) {
+    event.preventDefault(); 
 
-    // Initialize order summary
-    updateOrderSummary();
+    document.getElementById("formName").value = "User Name";
+    document.getElementById("formAddress").value = document.getElementById("displayAddress").innerText;
+    document.getElementById("formPostcode").value = document.getElementById("displayPostcode").innerText;
+
+    const selectedPayment = document.querySelector('input[name="paymentMethod"]:checked');
+    document.getElementById("formPayment").value = selectedPayment ? selectedPayment.value : "cash";
+
+    document.getElementById("formTip").value = tipAmount.toFixed(2);
+    document.getElementById("formDelivery").value = deliveryCharge.toFixed(2);
+    document.getElementById("formTotal").value = document.getElementById("totalAmount").innerText;
+
+    alert("✅ Order successfully placed!");
+
+    document.getElementById("checkoutForm").submit();
+}
+
+
+
     </script>
 </body>
+</html>

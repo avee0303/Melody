@@ -32,7 +32,7 @@ if (isset($_POST['register'])) {
                 $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
                 $mail->Port = 587;
 
-                $mail->setFrom('aveepang2005@gmail.com', 'Avee-Tech System');
+                $mail->setFrom('aveepang2005@gmail.com', 'Melody-Tech System');
                 $mail->addAddress($email, $name);
                 $mail->isHTML(true);
                 $verification_code = mt_rand(100000, 999999);
