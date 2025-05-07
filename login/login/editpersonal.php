@@ -26,26 +26,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Sanitize and validate input
     $first_name = $conn->real_escape_string(trim($_POST['first_name']));
     $last_name = $conn->real_escape_string(trim($_POST['last_name']));
-    $email = $conn->real_escape_string(trim($_POST['email']));
     $phone = $conn->real_escape_string(trim($_POST['phone']));
     $dob = $conn->real_escape_string(trim($_POST['dob']));
     $address = $conn->real_escape_string(trim($_POST['address']));
 
     // Basic validation
     if (empty($first_name) || empty($last_name) || empty($email) || empty($address)) {
-        $error_message = "First name, last name, email, and address are required fields.";
+        $error_message = "First name, last name, and address are required fields.";
     } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $error_message = "Invalid email format.";
     } else {
         // Update database (removed gender, added address)
-        $sql = "UPDATE users SET first_name=?, last_name=?, email=?, phone=?, dob=?, address=? WHERE id=?";
+        $sql = "UPDATE users SET first_name=?, last_name=?, phone=?, dob=?, address=? WHERE id=?";
         $stmt = $conn->prepare($sql);
-        $stmt->bind_param("ssssssi", $first_name, $last_name, $email, $phone, $dob, $address, $user_id);
+        $stmt->bind_param("ssssssi", $first_name, $last_name, $phone, $dob, $address, $user_id);
         
         if ($stmt->execute()) {
             $success_message = "Profile updated successfully!";
             // Refresh user data
-            $sql = "SELECT first_name, last_name, email, phone, dob, address FROM users WHERE id=?";
+            $sql = "SELECT first_name, last_name, phone, dob, address FROM users WHERE id=?";
             $stmt = $conn->prepare($sql);
             $stmt->bind_param("i", $user_id);
             $stmt->execute();
@@ -58,7 +57,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 } else {
     // Fetch current user data (removed gender, added address)
-    $sql = "SELECT first_name, last_name, email, phone, dob, address FROM users WHERE id=?";
+    $sql = "SELECT first_name, last_name, phone, dob, address FROM users WHERE id=?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("i", $user_id);
     $stmt->execute();
@@ -324,12 +323,7 @@ $conn->close();
             <div class="detail-value">
                 <input type="text" name="last_name" value="<?= htmlspecialchars($user['last_name']) ?>" required>
             </div>
-            
-            <div class="detail-label">Email:</div>
-            <div class="detail-value">
-                <input type="email" name="email" value="<?= htmlspecialchars($user['email']) ?>" required>
-            </div>
-            
+
             <div class="detail-label">Phone:</div>
             <div class="detail-value">
                 <input type="tel" name="phone" value="<?= htmlspecialchars($user['phone']) ?>" 
