@@ -3,7 +3,7 @@ session_start();
 include("config/db_connect.php");
 
 // Fetch Products
-$productQuery = $conn->query("SELECT * FROM product");
+$productQuery = $conn->query("SELECT * FROM products");
 ?>
 
 <!DOCTYPE html>
@@ -64,19 +64,19 @@ $productQuery = $conn->query("SELECT * FROM product");
             <th>Product Price (RM)</th>
             <th>Actions</th>
         </tr>
-        <?php while ($product = $productQuery->fetch_assoc()): ?>
+        <?php while ($products = $productQuery->fetch_assoc()): ?>
         <tr>
-            <td><?= $product['id'] ?></td>
+            <td><?= $products['id'] ?></td>
             <td>
-                <img src="uploads/<?= htmlspecialchars($product['image']) ?>" width="50">
+                <img src="uploads/<?= htmlspecialchars($products['image']) ?>" width="50">
             </td>
-            <td><?= htmlspecialchars($product['name']) ?></td>
-            <td><?= htmlspecialchars($product['description']) ?></td>
-            <td><?= htmlspecialchars($product['category']) ?></td> <!-- Display category -->
-            <td>RM <?= number_format($product['price'], 2) ?></td> <!-- Price formatting -->
+            <td><?= htmlspecialchars($products['name']) ?></td>
+            <td><?= htmlspecialchars($products['description']) ?></td>
+            <td><?= htmlspecialchars($products['category']) ?></td> <!-- Display category -->
+            <td>RM <?= number_format($products['price'], 2) ?></td> <!-- Price formatting -->
             <td>
-                <a href="edit_product.php?id=<?= $product['id'] ?>">Edit</a>
-                <a href="delete_product.php?id=<?= $product['id'] ?>">Delete</a>
+                <a href="edit_product.php?id=<?= $products['id'] ?>">Edit</a>
+                <a href="delete_product.php?id=<?= $products['id'] ?>">Delete</a>
             </td>
         </tr>
         <?php endwhile; ?>
