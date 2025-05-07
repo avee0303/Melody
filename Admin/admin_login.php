@@ -37,11 +37,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Login</title>
 
-    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
     <div class="login-container">
-        <img src="images/4.0logo.jpg" alt="Burger King Logo" class="logo">
+        <img src="admin/4.0logo.jpg" alt="Burger King Logo" class="logo">
         <h2>Admin Login</h2>
         <?php if (isset($error)) echo "<p class='error'>$error</p>"; ?>
         <form method="POST">
