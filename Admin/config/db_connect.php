@@ -2,7 +2,7 @@
 $servername = "localhost";
 $username = "root";
 $password = "";
-$dbname = "database"; // change this
+$dbname = "burger4.0"; // change this
 
 $conn = new mysqli($servername, $username, $password, $dbname);
 
