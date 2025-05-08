@@ -4,7 +4,7 @@ session_start();
 $servername = "localhost";
 $username = "root";
 $password = "";
-$dbname = "users_db";
+$dbname = "burger4.0";
 
 // Connect to database
 $conn = new mysqli($servername, $username, $password, $dbname);
@@ -33,7 +33,7 @@ $result = $stmt->get_result();
 if ($result->num_rows === 1) {
     $user = $result->fetch_assoc();
 
-    if (password_verify($password, $user['password'])) {
+    if (password_verify($password, $user['password_hash'])) {
         // Set session variables
         $_SESSION['user_id'] = $user['id'];
         $_SESSION['first_name'] = $user['first_name'];
@@ -46,9 +46,7 @@ if ($result->num_rows === 1) {
 
         $stmt->close();
         $conn->close();
-        
         header("Location: ../login/main2_page.php");
-
         exit();
     } else {
         $_SESSION['error_message'] = "Incorrect password.";
