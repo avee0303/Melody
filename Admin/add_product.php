@@ -30,34 +30,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         } elseif (!move_uploaded_file($_FILES["image"]["tmp_name"], $image_path)) {
             $error = "Image upload failed. Please check directory permissions.";
         } else {
-            $image = $image_path;
+            $image = $image_name;
         }
     }
-
-    if (!isset($error)) {
-        // Get category ID from name
-        $category_stmt = $conn->prepare("SELECT id FROM categories WHERE name = ?");
-        $category_stmt->bind_param("s", $category_name);
-        $category_stmt->execute();
-        $category_result = $category_stmt->get_result();
-        
-        if ($category_result->num_rows > 0) {
-            $category_data = $category_result->fetch_assoc();
-            $categories_id = $category_data['id'];
-
-            $stmt = $conn->prepare("INSERT INTO products (name, description, price, category, image) VALUES (?, ?, ?, ?, ?)");
-            $stmt->bind_param("ssdss", $name, $description, $price, $category, $image);
-
-            if ($stmt->execute()) {
-                header("Location: manage_products.php?success=Product added successfully");
-                exit();
-            } else {
-                $error = "Error adding product: " . $conn->error;
-            }
+    if (!empty($category_name) && !isset($error)) {
+        $is_active = 1;
+    
+        $stmt = $conn->prepare("INSERT INTO products (name, description, price, category, image, is_active) VALUES (?, ?, ?, ?, ?, ?)");
+        $stmt->bind_param("ssdssi", $name, $description, $price, $category_name, $image, $is_active);
+    
+        if ($stmt->execute()) {
+            header("Location: manage_products.php?success=Product added successfully");
+            exit();
         } else {
-            $error = "Selected category not found.";
+            $error = "Error adding product: " . $conn->error;
         }
+    } elseif (!isset($error)) {
+        $error = "Please select a valid category.";
     }
+    
 }
 ?>
 
