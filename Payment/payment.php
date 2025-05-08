@@ -1,11 +1,22 @@
 <?php
+$servername = "localhost"; 
+$username = "root";        
+$password = "";           
+$dbname = "users_db"; 
+session_start();
+$conn = new mysqli($servername, $username, $password, $dbname);
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+$address = "";
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $userId = $_POST['users_id'];
     $cartId = $_POST['cart_id'];
     $name = $_POST['name'];
     $address = $_POST['address'];
-    $postcode = $_POST['postcode'];
     $paymentMethod = $_POST['paymentMethod'];
     $tip = $_POST['tip'];
     $deliveryCharge = $_POST['deliveryCharge'];
@@ -13,47 +24,40 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $checkoutLat = $_POST['checkoutLat'];
     $checkoutLng = $_POST['checkoutLng'];
 
-    $servername = "localhost"; 
-    $username = "root";        
-    $password = "";           
-    $dbname = "payment"; 
+    $stmt = $conn->prepare("INSERT INTO orders (user_id, cart_id, name, address,payment_method, tip, delivery_charge, total_amount, checkout_lat, checkout_lng)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
+    $stmt->bind_param(
+        "iissssddss", 
+        $userId,
+        $cartId,
+        $name,
+        $address,
+        $paymentMethod,
+        $tip,
+        $deliveryCharge,
+        $totalAmount,
+        $checkoutLat,
+        $checkoutLng
+    );
 
-    $conn = new mysqli($servername, $username, $password, $dbname);
-
-
-    if ($conn->connect_error) {
-        die("Connection failed: " . $conn->connect_error);
-    }
-    $stmt = $conn->prepare("INSERT INTO orders (user_id, cart_id, name, address, postcode, payment_method, tip, delivery_charge, total_amount, checkout_lat, checkout_lng)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-
-$stmt->bind_param(
-"iisssssddss",  // types: int, int, string, string, string, string, string, double, double, string, string
-$userId,
-$cartId,
-$name,
-$address,
-$postcode,
-$paymentMethod,
-$tip,
-$deliveryCharge,
-$totalAmount,
-$checkoutLat,
-$checkoutLng
-);
-
-    
     if (!$stmt->execute()) {
         echo "Error: " . $stmt->error;
     }
-
     $stmt->close();
-    $conn->close();
 }
+
+
+if (!isset($userId)) {
+    $userId = $_SESSION['user_id'] ?? null;
+}
+
+$userid=$_SESSION['user_id'];
+$getrecord=mysqli_query($conn,"SELECT * FROM users WHERE id='$userid'");
+$fetch=mysqli_fetch_assoc($getrecord);
+
+$conn->close();
 ?>
-
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -168,20 +172,19 @@ $checkoutLng
         <div class="checkout-container">
             <h2>Checkout</h2>
 
-            <div class="section">
+<div class="section">
                 <h3>Delivery Address</h3>
                 <div class="address-box">
-                    <p><strong id="displayAddress">5 Jalan Bukit Indah 17</strong></p>
-                    <p id="displayPostcode">Johor, 85020</p>
-                    <button onclick="openAddressForm()">Change</button>
+                <p><strong id="displayAddress"><?php echo $fetch["address"]; ?></strong></p>
+        <button onclick="openAddressForm()">Change</button>
                 </div>
                 <div id="addressForm" style="display: none;">
                     <input type="text" id="newAddress" placeholder="Enter new address">
-                    <input type="text" id="newPostcode" placeholder="Enter new postcode">
                     <button onclick="saveAddress()">Save</button>
                     <button onclick="closeAddressForm()">Cancel</button>
                 </div>
             </div>
+
 
             <div>
                 <h3>Order Time</h3>
@@ -251,11 +254,10 @@ $checkoutLng
       <button class="submit-btn" type="submit">Place Order</button>
     </div>
   </div>
-  <input type="hidden" name="users_id" value="1">
+  <input type="hidden" name="users_id" value=<?php echo $fetch["id"]; ?> >
   <input type="hidden" name="cart_id" value="123">
   <input type="hidden" name="name" id="formName">
   <input type="hidden" name="address" id="formAddress">
-  <input type="hidden" name="postcode" id="formPostcode">
   <input type="hidden" name="paymentMethod" id="formPayment">
   <input type="hidden" name="tip" id="formTip">
   <input type="hidden" name="deliveryCharge" id="formDelivery">
@@ -447,38 +449,41 @@ expDateInput.addEventListener('input', function(e) {
 
 
 
-    function openAddressForm() {
-        document.getElementById('addressForm').style.display = 'block';
+function openAddressForm() {
+    document.getElementById('addressForm').style.display = 'block';
+}
+
+function closeAddressForm() {
+    document.getElementById('addressForm').style.display = 'none';
+}
+
+function saveAddress() {
+    let newAddress = document.getElementById('newAddress').value.trim();
+    let currentAddress = document.getElementById('displayAddress').innerText;
+
+    if (!newAddress) {
+        alert("⚠️ Please enter your new address!");
+        return;
     }
 
-    function closeAddressForm() {
-        document.getElementById('addressForm').style.display = 'none';
+    if (newAddress === currentAddress) {
+        alert("⚠️ Your new address must be different from the current address!");
+        return;
     }
 
-    function saveAddress() {
-        let newAddress = document.getElementById('newAddress').value.trim();
-        let newPostcode = document.getElementById('newPostcode').value.trim();
-        let currentAddress = document.getElementById('displayAddress').innerText;
-        let currentPostcode = document.getElementById('displayPostcode').innerText;
+    // Update address on display
+    document.getElementById('displayAddress').innerText = newAddress;
 
-        if (!newAddress || !newPostcode) {
-            alert("⚠️ Please enter your new address and postcode!");
-            return;
-        }
-        if (newAddress === currentAddress && newPostcode === currentPostcode) {
-            alert("⚠️ Your new address must be different from the current address!");
-            return;
-        }
-
-        document.getElementById('displayAddress').innerText = newAddress;
-        document.getElementById('displayPostcode').innerText = newPostcode;
-
-        document.getElementById("formAddress").value = newAddress;
-        document.getElementById("formPostcode").value = newPostcode;
-
-        closeAddressForm();
+    // Optional: update hidden input field if used in a form
+    let formAddressInput = document.getElementById("formAddress");
+    if (formAddressInput) {
+        formAddressInput.value = newAddress;
     }
 
+    closeAddressForm();
+}
+
+    
     
     function placeOrder(event) {
     event.preventDefault(); 
@@ -517,7 +522,6 @@ expDateInput.addEventListener('input', function(e) {
 
     document.getElementById("formName").value = "User Name";
     document.getElementById("formAddress").value = document.getElementById("displayAddress").innerText;
-    document.getElementById("formPostcode").value = document.getElementById("displayPostcode").innerText;
     document.getElementById("formPayment").value = paymentMethod;
     document.getElementById("formTip").value = tipAmount.toFixed(2);
     document.getElementById("formDelivery").value = deliveryCharge.toFixed(2);
