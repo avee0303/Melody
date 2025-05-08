@@ -11,13 +11,11 @@ $username = "root";
 $password = "";
 $dbname = "users_db";
 
-// Connect to database
 $conn = new mysqli($servername, $username, $password, $dbname);
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// Fetch user data
 $sql = "SELECT * FROM users WHERE id=?";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("i", $user_id);
