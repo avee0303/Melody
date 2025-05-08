@@ -41,7 +41,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </head>
 <body>
     <div class="login-container">
-        <img src="admin/4.0logo.jpg" alt="Burger King Logo" class="logo">
+        <img src="images/4.0logo.jpg" alt="Burger King Logo" class="logo">
         <h2>Admin Login</h2>
         <?php if (isset($error)) echo "<p class='error'>$error</p>"; ?>
         <form method="POST">
