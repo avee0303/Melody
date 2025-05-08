@@ -43,7 +43,8 @@ unset($_SESSION['success_message'], $_SESSION['error_message']);
             overflow: hidden;
             width: 768px;
             max-width: 100%;
-            min-height: 560px; /* increased height for extra inputs */
+            min-height: 650px; /* increased height for extra inputs */
+            margin-top: 100px;
         }
 
         .container p {
@@ -140,6 +141,34 @@ unset($_SESSION['success_message'], $_SESSION['error_message']);
             height: 100%;
             transition: all 0.6s ease-in-out;
         }
+
+        .top-nav {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        z-index: 1000;
+    }
+
+    .nav-button {
+        background-color: #b71c1c;
+        color: white;
+        border: none;
+        padding: 12px 24px;
+        font-size: 16px;
+        border-radius: 10px;
+        font-weight: bold;
+        cursor: pointer;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        display: inline-block;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    .nav-button:hover {
+        background-color: rgb(91, 31, 31);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    }
 
         .sign-in {
             left: 0;
@@ -300,25 +329,29 @@ unset($_SESSION['success_message'], $_SESSION['error_message']);
 </head>
 <body>
 
-<nav>
-    <a href="main.html">
-        <img src="back.png" alt="back">
-    </a>
-</nav>
+<div class="top-nav">
+    <a href="main.html" class="nav-button">Back</a>
+</div>
 
 <div class="container" id="container">
     <div class="form-container sign-up">
-        <form action="register_handler.php" method="POST">  
+        <form action="register_handler.php" method="POST">
             <h1>Create Account</h1>
-            <span>Use your details to register</span>
             <input type="text" name="first_name" placeholder="First Name" required>
             <input type="text" name="last_name" placeholder="Last Name" required>
             <input type="email" name="email" placeholder="Email" required>
             <input type="tel" name="phone" placeholder="e.g., 0123456789 or 60123456789" 
-                pattern="^(\+60|60|0)\d{8,10}$" required>
+                   pattern="^(\+60|60|0)\d{8,10}$" required>
             <input type="date" name="dob" placeholder="Date of Birth">
             <textarea name="address" placeholder="Enter your full address (street, city, postal code)" required></textarea>
-            <input type="password" name="password" placeholder="Password" minlength="6" required>
+            <input type="password" name="password" id="password" placeholder="Password" minlength="8" required>
+            <input type="password" name="confirm_password" placeholder="Confirm Password" required>
+            <p id="password-requirements" style="font-size: 12px; color: #555; margin: 5px 0 0;">
+                Password must be at least 8 characters and include:
+                <br>• One uppercase letter
+                <br>• One lowercase letter
+                <br>• One number
+            </p>
             <button type="submit">Sign Up</button>
         </form>
     </div>
@@ -357,5 +390,27 @@ unset($_SESSION['success_message'], $_SESSION['error_message']);
 <?php endif; ?>
 
 <script src="script.js"></script>
+<script>
+    const passwordInput = document.getElementById("password");
+    const requirements = document.getElementById("password-requirements");
+
+    passwordInput.addEventListener("input", () => {
+        const value = passwordInput.value;
+        let messages = [];
+
+        if (value.length < 8) messages.push("• At least 8 characters");
+        if (!/[A-Z]/.test(value)) messages.push("• One uppercase letter");
+        if (!/[a-z]/.test(value)) messages.push("• One lowercase letter");
+        if (!/[0-9]/.test(value)) messages.push("• One number");
+
+        if (messages.length > 0) {
+            requirements.innerHTML = "Password must include:<br>" + messages.join("<br>");
+            requirements.style.color = "red";
+        } else {
+            requirements.innerHTML = "Strong password!";
+            requirements.style.color = "green";
+        }
+    });
+</script>
 </body>
 </html>
