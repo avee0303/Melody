@@ -1,6 +1,6 @@
 <?php
 // menu2.php
-$conn = new mysqli("localhost", "root", "", "database");
+$conn = new mysqli("localhost", "root", "", "burger4.0");
 if ($conn->connect_error) die("Connection failed: " . $conn->connect_error);
 
 // Get all active categories
@@ -224,7 +224,7 @@ $categories = $conn->query("SELECT * FROM categories");
         <?php while ($category = $categories->fetch_assoc()): ?>
             <div class="burger-item">
                 <a href="product.php?category_id=<?= $category['id'] ?>" class="burger-card">
-                    <img src="<?= htmlspecialchars($category['image_path']) ?>" alt="<?= htmlspecialchars($category['name']) ?>">
+                    <img src="<?= htmlspecialchars($category['image']) ?>" alt="<?= htmlspecialchars($category['name']) ?>">
                 </a>
                 <p><?= htmlspecialchars($category['name']) ?></p>
             </div>

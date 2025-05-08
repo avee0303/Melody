@@ -25,7 +25,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     if (!isset($error)) {
-        $stmt = $conn->prepare("INSERT INTO categories (name, image_path) VALUES (?, ?)");
+        $stmt = $conn->prepare("INSERT INTO categories (name, image) VALUES (?, ?)");
         $stmt->bind_param("ss", $name, $image);
 
         if ($stmt->execute()) {

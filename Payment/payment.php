@@ -2,7 +2,11 @@
 $servername = "localhost"; 
 $username = "root";        
 $password = "";           
+<<<<<<< HEAD
 $dbname = "users_db"; 
+=======
+$dbname = "burger4.0"; 
+>>>>>>> 79fae87dea1c8d1613bdcf10cb677327eeea90c0
 session_start();
 $conn = new mysqli($servername, $username, $password, $dbname);
 if ($conn->connect_error) {
@@ -24,7 +28,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $checkoutLat = $_POST['checkoutLat'];
     $checkoutLng = $_POST['checkoutLng'];
 
+<<<<<<< HEAD
     $stmt = $conn->prepare("INSERT INTO orders (user_id, cart_id, name, address,payment_method, tip, delivery_charge, total_amount, checkout_lat, checkout_lng)
+=======
+    // Insert data into the checkout table
+    $stmt = $conn->prepare("INSERT INTO checkout(user_id, cart_id, name, address, payment_method, tip, delivery_charge, total_amount, checkout_lat, checkout_lng)
+>>>>>>> 79fae87dea1c8d1613bdcf10cb677327eeea90c0
     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
     $stmt->bind_param(
@@ -47,7 +56,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt->close();
 }
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 79fae87dea1c8d1613bdcf10cb677327eeea90c0
 if (!isset($userId)) {
     $userId = $_SESSION['user_id'] ?? null;
 }
@@ -173,6 +185,10 @@ $conn->close();
             <h2>Checkout</h2>
 
 <div class="section">
+<<<<<<< HEAD
+=======
+                <h>Phone Number:<strong id="displayPhonenumber"><?php echo $fetch["phone"]; ?></strong></h>
+>>>>>>> 79fae87dea1c8d1613bdcf10cb677327eeea90c0
                 <h3>Delivery Address</h3>
                 <div class="address-box">
                 <p><strong id="displayAddress"><?php echo $fetch["address"]; ?></strong></p>
@@ -243,11 +259,10 @@ $conn->close();
                 <p><strong>Total: RM <span id="totalAmount">0.00</span></strong></p>
             </div>
 
-        
-
         </div>
     </div>
     <form id="checkoutForm" method="POST" onsubmit="placeOrder(event)">
+<<<<<<< HEAD
   <div class="main-box">
     <div class="checkout-container">
       
@@ -270,6 +285,26 @@ $conn->close();
 </form>
 
 
+=======
+        <div class="main-box">
+            <div class="checkout-container">
+                <button class="submit-btn" type="submit">Place Order</button>
+            </div>
+        </div>
+        <input type="hidden" name="users_id" value=<?php echo $fetch["id"]; ?> >
+        <input type="hidden" name="cart_id" value="123">
+        <input type="hidden" name="name" id="formName">
+        <input type="hidden" name="address" id="formAddress">
+        <input type="hidden" name="paymentMethod" id="formPayment">
+        <input type="hidden" name="tip" id="formTip">
+        <input type="hidden" name="deliveryCharge" id="formDelivery">
+        <input type="hidden" name="totalAmount" id="formTotal">
+        <input type="hidden" name="checkoutLat" id="formLat" value="0">
+        <input type="hidden" name="checkoutLng" id="formLng" value="0">
+        <input type="hidden" name="date" id="checkoutDate">
+        <input type="hidden" name="time" id="checkoutTime">
+    </form>
+>>>>>>> 79fae87dea1c8d1613bdcf10cb677327eeea90c0
 </body>
 </html>
 
@@ -314,7 +349,7 @@ $conn->close();
         storedCartItems.forEach(item => {
             let itemTotal = item.price * item.quantity;
             subtotal += itemTotal;
-            orderSummaryDiv.innerHTML += `<p>${item.name} (x${item.quantity}) - RM ${itemTotal.toFixed(2)}</p>`;
+            orderSummaryDiv.innerHTML += <p>${item.name} (x${item.quantity}) - RM ${itemTotal.toFixed(2)}</p>;
         });
 
         orders = [...storedCartItems];
@@ -337,19 +372,19 @@ function updateOrderSummary(subtotal) {
 
     orders.forEach(item => {
         let itemTotal = item.price * (item.quantity || 1);
-        orderSummaryDiv.innerHTML += `<p>${item.name} (x${item.quantity || 1}) - RM ${itemTotal.toFixed(2)}</p>`;
+        orderSummaryDiv.innerHTML += <p>${item.name} (x${item.quantity || 1}) - RM ${itemTotal.toFixed(2)}</p>;
     });
 
-    orderSummaryDiv.innerHTML += `<p>Packaging Fee - RM ${packagingFee.toFixed(2)}</p>`;
-    orderSummaryDiv.innerHTML += `<p>Service Tax - RM ${serviceTax.toFixed(2)}</p>`;
-    orderSummaryDiv.innerHTML += `<p>Delivery - RM ${deliveryCharge.toFixed(2)}</p>`;
+    orderSummaryDiv.innerHTML += <p>Packaging Fee - RM ${packagingFee.toFixed(2)}</p>;
+    orderSummaryDiv.innerHTML += <p>Service Tax - RM ${serviceTax.toFixed(2)}</p>;
+    orderSummaryDiv.innerHTML += <p>Delivery - RM ${deliveryCharge.toFixed(2)}</p>;
 
     if (tipAmount > 0) {
-        orderSummaryDiv.innerHTML += `<p>Tip - RM ${tipAmount.toFixed(2)}</p>`;
+        orderSummaryDiv.innerHTML += <p>Tip - RM ${tipAmount.toFixed(2)}</p>;
     }
 
     if (discount > 0) {
-        orderSummaryDiv.innerHTML += `<p style="color:green;">Promo Discount - RM ${discount.toFixed(2)}</p>`;
+        orderSummaryDiv.innerHTML += <p style="color:green;">Promo Discount - RM ${discount.toFixed(2)}</p>;
     }
 
     document.getElementById('totalAmount').innerText = total.toFixed(2);
@@ -361,7 +396,7 @@ function updateOrderSummary(subtotal) {
 
     if (promoCodes.hasOwnProperty(promoCode)) {
         discount = promoCodes[promoCode];
-        document.getElementById("discountInfo").innerText = `Promo Applied: ${promoCode} (-RM ${discount.toFixed(2)})`;
+        document.getElementById("discountInfo").innerText = Promo Applied: ${promoCode} (-RM ${discount.toFixed(2)});
         document.getElementById("discountInfo").style.color = "green";
     } else {
         discount = 0;
@@ -462,12 +497,20 @@ function saveAddress() {
     let currentAddress = document.getElementById('displayAddress').innerText;
 
     if (!newAddress) {
+<<<<<<< HEAD
         alert("⚠️ Please enter your new address!");
+=======
+        alert("⚠ Please enter your new address!");
+>>>>>>> 79fae87dea1c8d1613bdcf10cb677327eeea90c0
         return;
     }
 
     if (newAddress === currentAddress) {
+<<<<<<< HEAD
         alert("⚠️ Your new address must be different from the current address!");
+=======
+        alert("⚠ Your new address must be different from the current address!");
+>>>>>>> 79fae87dea1c8d1613bdcf10cb677327eeea90c0
         return;
     }
 
@@ -498,23 +541,23 @@ function saveAddress() {
         const cvv = document.querySelector('input[name="cvv"]').value.trim();
 
         if (!cardNumber || !expDate || !cvv) {
-            alert("⚠️ Please complete all credit card information before placing the order.");
+            alert("⚠ Please complete all credit card information before placing the order.");
             return;
         }
 
         // Optional: basic format checks
         if (cardNumber.replace(/\s/g, '').length < 16) {
-            alert("⚠️ Card number must be at least 16 digits.");
+            alert("⚠ Card number must be at least 16 digits.");
             return;
         }
 
         if (!/^(0[1-9]|1[0-2])\/\d{2}$/.test(expDate)) {
-            alert("⚠️ Expiration date format is invalid.");
+            alert("⚠ Expiration date format is invalid.");
             return;
         }
 
         if (!/^\d{3}$/.test(cvv)) {
-            alert("⚠️ CVV must be 3 digits.");
+            alert("⚠ CVV must be 3 digits.");
             return;
         }
     }
