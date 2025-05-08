@@ -9,7 +9,7 @@ $user_id = $_SESSION['user_id'];
 $servername = "localhost";
 $username = "root";
 $password = "";
-$dbname = "users_db";
+$dbname = "burger4.0";
 
 // Connect to database
 $conn = new mysqli($servername, $username, $password, $dbname);
