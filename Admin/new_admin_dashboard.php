@@ -52,7 +52,7 @@ $conn->close();
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Superadmin Dashboard</title>
+    <title>Admin Dashboard</title>
     <style>
         body { font-family: Arial, sans-serif; background: #f4f4f4; margin: 0; padding: 20px; }
         .dashboard { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; }
@@ -69,41 +69,35 @@ $conn->close();
 </head>
 <body>
 
-<h1>Superadmin Dashboard</h1>
+<h1>Admin Dashboard</h1>
 <link rel="stylesheet" href="css/styles.css">
 
 <div class="dashboard">
-    <a href="manage_staffs.php" class="card-link">
-        <div class="card">
-            <h2><?= $staffTotal ?></h2>
-            <p>Staff</p>
-        </div>
-    </a>
-    <a href="view_orders.php" class="card-link">
+    <a href="manage_orders.php" class="card-link">
         <div class="card">
             <h2><?= $orderTotal ?></h2>
             <p>Orders</p>
         </div>
     </a>
-    <a href="view_customers.php" class="card-link">
+    <a href="manage_customers.php" class="card-link">
         <div class="card">
             <h2><?= $customerTotal ?></h2>
             <p>Customers</p>
         </div>
     </a>
-    <a href="view_deliveries.php" class="card-link">
+    <a href="manage_deliveries.php" class="card-link">
         <div class="card">
             <h2><?= $deliveryTotal ?></h2>
             <p>Deliveries</p>
         </div>
     </a>
-    <a href="view_categories.php" class="card-link">
+    <a href="manage_categories.php" class="card-link">
         <div class="card">
             <h2><?= $categoryTotal ?></h2>
             <p>Categories</p>
         </div>
     </a>
-    <a href="view_products.php" class="card-link">
+    <a href="manage_products.php" class="card-link">
         <div class="card">
             <h2><?= $productTotal ?></h2>
             <p>Products</p>
